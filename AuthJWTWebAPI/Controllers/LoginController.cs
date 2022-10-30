@@ -4,6 +4,7 @@ using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AuthJWTWebAPI.Controllers
 {
@@ -23,21 +24,26 @@ namespace AuthJWTWebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
-            User? user = await _userService.GetUserAsync(userLogin.Username, userLogin.Password);
+            if (ModelState.IsValid)
+            { 
+                User? user = await _userService.GetUserAsync(userLogin.Username, userLogin.Password);
 
-            if (user == null)
-            {
-                return NotFound("User not found");
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                var token = _userService.GenerateToken(user);
+
+                if (token == null)
+                {
+                    return NotFound("System can not create token");
+                }
+
+                return Ok(token);
             }
 
-            var token = _userService.GenerateToken(user);
-
-            if (token == null)
-            {
-                return NotFound("System can not create token");
-            }
-
-            return Ok(token);
+            return BadRequest("Insert all the flieds");
         }
     }
 }

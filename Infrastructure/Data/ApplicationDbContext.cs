@@ -28,6 +28,7 @@ namespace Infrastructure.Data
                 user.Property(p => p.Id).ValueGeneratedOnAdd();
                 user.Property(p => p.Name).IsRequired();
                 user.Property(p => p.UserName).IsRequired();
+                user.HasIndex(p => p.UserName).IsUnique();
                 user.Property(p => p.Password).IsRequired();
                 user.HasMany(x => x.Roles)
                 .WithMany(x => x.Users)

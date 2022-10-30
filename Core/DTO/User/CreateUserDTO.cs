@@ -5,13 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.DTO.Auth
+namespace Core.DTO.User
 {
-    public class UserLogin
+    public class CreateUserDTO
     {
         [Required]
-        public string Username { get; set; }
+        public string Name { get; set; }
+        [Required]
+        public string UserName { get; set; }
         [Required]
         public string Password { get; set; }
+        public int? idRole { get; set; }
     }
 }

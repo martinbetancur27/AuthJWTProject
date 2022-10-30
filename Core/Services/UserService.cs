@@ -28,7 +28,7 @@ namespace Core.Services
         public async Task<User?> GetUserAsync(string userName, string password)
         {
             var passwordSha256 = EncryptTool.GetSHA256OfString(password);
-            return await _userRepository.GetUserOfDatabaseAsync(userName, passwordSha256);
+            return await _userRepository.GetUserLoginOfDatabaseAsync(userName, passwordSha256);
         }
 
         public string? GenerateToken(User user)
