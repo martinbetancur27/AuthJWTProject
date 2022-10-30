@@ -10,7 +10,8 @@ namespace Core.Interfaces.Services
     public interface IUserService
     {
         public Task<User?> GetUserAsync(string userName, string password);
-
         public string? GenerateToken(User user);
+        public Task<User?> GetUserByIdOfDatabaseAsync(int idUser);
+        public bool? ChangePassword(User user);
     }
 }

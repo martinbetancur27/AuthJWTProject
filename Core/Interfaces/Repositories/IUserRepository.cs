@@ -16,5 +16,6 @@ namespace Core.Interfaces.Repositories
         public Task<bool?> DeleteUserByIdOfDatabaseAsync(int idUser);
         public Task<bool?> DeleteRoleInUserAsync(int idUser, int idRole);
         public Task<bool?> ExistRoleInUserAsync(int idUser, int idRole);
+        public bool? ChangePassword(User user);
     }
 }

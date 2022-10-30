@@ -39,7 +39,7 @@ namespace Core.Services
 
             var identity = new ClaimsIdentity(new[] 
             {
-            
+                new Claim(ClaimTypes.Authentication, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.NameIdentifier, user.UserName)
             });
@@ -56,6 +56,17 @@ namespace Core.Services
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+
+        public async Task<User?> GetUserByIdOfDatabaseAsync(int idUser)
+        {
+            return await _userRepository.GetUserByIdOfDatabaseAsync(idUser);
+        }
+
+        public bool? ChangePassword(User user)
+        {
+            return _userRepository.ChangePassword(user);
         }
     }
 }

@@ -176,5 +176,26 @@ namespace Infrastructure.Data
                 return null;
             }
         }
+
+
+        public bool? ChangePassword(User user)
+        {
+            try
+            {
+                if (user == null)
+                {
+                    return false;
+                }
+
+                _databaseContext.Users.Update(user);
+                _databaseContext.SaveChanges();
+
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+        }
     }
 }
