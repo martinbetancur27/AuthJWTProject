@@ -1,4 +1,5 @@
 ﻿using Core.DTO.Auth;
+using Core.DTO.Response;
 using Core.Entities.Auth;
 using Core.Interfaces.Services;
 using Core.Tools;
@@ -26,22 +27,32 @@ namespace AuthJWTWebAPI.Controllers
         public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
             if (ModelState.IsValid)
-            { 
+            {
+                ResponseLoginDTO responseLoginDTO = new ResponseLoginDTO();
+
                 User? user = await _userService.GetUserAsync(userLogin.Username, userLogin.Password);
 
                 if (user == null)
                 {
-                    return NotFound("User not found");
+                    responseLoginDTO.Result = 0;
+                    responseLoginDTO.Mesagge = "User not found";
+                    return NotFound(responseLoginDTO);
                 }
 
                 var token = _userService.GenerateToken(user);
 
                 if (token == null)
                 {
-                    return NotFound("System can not create token");
+                    responseLoginDTO.Result = 0;
+                    responseLoginDTO.Mesagge = "System can not create token";
+                    return NotFound(responseLoginDTO);
                 }
 
-                return Ok(token);
+                responseLoginDTO.Result = 1;
+                responseLoginDTO.Mesagge = "Succes";
+                responseLoginDTO.Token = token;
+
+                return Ok(responseLoginDTO);
             }
 
             return BadRequest("Insert all the flieds");
