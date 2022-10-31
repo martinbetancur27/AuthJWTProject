@@ -120,20 +120,30 @@ namespace AuthJWTWebAPI.Controllers
 
         [Route("user/deleterole")]
         [HttpDelete()]
-        public async Task<IActionResult> DeleteRoleInUser([FromBody] UserRoleDTO deleteUserRoleOfUser)
+        public async Task<IActionResult> DeleteRoleInUser([FromBody] UserRoleDTO deleteRoleInUser)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
 
             if (ModelState.IsValid)
             {
-                var responseDeleteRoleInUser = await _adminService.DeleteRoleInUserAsync(deleteUserRoleOfUser.IdUser, deleteUserRoleOfUser.IdRole);
+                var roleInUserFromDb = await _adminService.GetUserRoleDatabaseAsync(deleteRoleInUser.IdUser, deleteRoleInUser.IdRole);
+
+                if (roleInUserFromDb == null)
+                {
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error: The user does not have that role";
+
+                    return BadRequest(responseGeneralDTO);
+                }
+
+                var responseDeleteRoleInUser = await _adminService.DeleteRoleInUserAsync(roleInUserFromDb);
 
                 if (responseDeleteRoleInUser == null)
                 {
                     responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error System: The System can not delete the role in the user";
+                    responseGeneralDTO.Mesagge = "Error System: The role in the user can not delete";
 
-                    return NotFound(responseGeneralDTO);
+                    NotFound(responseGeneralDTO);
                 }
 
                 if (!responseDeleteRoleInUser.Value)
@@ -159,33 +169,25 @@ namespace AuthJWTWebAPI.Controllers
 
         [Route("user/addrole")]
         [HttpPost()]
-        public async Task<IActionResult> AddRoleInUser([FromBody] UserRoleDTO deleteUserRoleOfUser)
+        public async Task<IActionResult> AddRoleInUser([FromBody] UserRoleDTO newRoleInUser)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
 
             if (ModelState.IsValid)
             {
-                var responseExistRoleInUser = await _adminService.ExistRoleInUserAsync(deleteUserRoleOfUser.IdUser, deleteUserRoleOfUser.IdRole);
+                var roleInUserFromDb = await _adminService.GetUserRoleDatabaseAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
 
-                if (responseExistRoleInUser == null)
+                if (roleInUserFromDb != null)
                 {
                     responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error: System can not validate the role";
+                    responseGeneralDTO.Mesagge = "Error: The user already has that role";
 
                     return NotFound(responseGeneralDTO);
                 }
 
-                if (responseExistRoleInUser.Value)
-                {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error: The user already has the role";
+                var responseAddRoleInUser = await _adminService.AddRoleInUserAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
 
-                    return Ok(responseGeneralDTO);
-                }
-
-                var responseDeleteRoleInUser = await _adminService.AddRoleInUserAsync(deleteUserRoleOfUser.IdUser, deleteUserRoleOfUser.IdRole);
-
-                if (responseDeleteRoleInUser == null)
+                if (responseAddRoleInUser == null)
                 {
                     responseGeneralDTO.Result = 0;
                     responseGeneralDTO.Mesagge = "Error System: The System can not save the role in the user";
@@ -193,16 +195,16 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseGeneralDTO);
                 }
 
-                if (!responseDeleteRoleInUser.Value)
+                if (!responseAddRoleInUser.Value)
                 {
                     responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error: The role of user can not saved";
+                    responseGeneralDTO.Mesagge = "Error: The role in the user can not saved";
 
                     return NotFound(responseGeneralDTO);
                 }
 
                 responseGeneralDTO.Result = 1;
-                responseGeneralDTO.Mesagge = "The role of user has been saved";
+                responseGeneralDTO.Mesagge = "The role in the user has been saved";
 
                 return Ok(responseGeneralDTO);
             }

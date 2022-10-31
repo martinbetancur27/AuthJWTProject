@@ -47,7 +47,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (token == null)
                 {
                     responseLoginDTO.Result = 0;
-                    responseLoginDTO.Mesagge = "System can not create token";
+                    responseLoginDTO.Mesagge = "Can not create token";
                     return NotFound(responseLoginDTO);
                 }
 

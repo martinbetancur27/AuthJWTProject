@@ -35,20 +35,19 @@ namespace Core.Services
             return await _userRepository.DeleteUserByIdOfDatabaseAsync(idUser);
         }
 
-        public async Task<bool?> DeleteRoleInUserAsync(int idUser, int idRole)
+        public async Task<bool?> DeleteRoleInUserAsync(UserRole userRole)
         {
-            return await _userRepository.DeleteRoleInUserAsync(idUser, idRole);
+            return await _userRepository.DeleteRoleInUserAsync(userRole);
         }
 
+        public async Task<UserRole?> GetUserRoleDatabaseAsync(int idUser, int idRole)
+        {
+            return await _userRepository.GetUserRoleDatabaseAsync(idUser, idRole);
+        }
 
         public async Task<bool?> AddRoleInUserAsync(int idUser, int idRole)
         {
             return await _userRepository.AddRoleInUserAsync(idUser, idRole);
-        }
-
-        public async Task<bool?> ExistRoleInUserAsync(int idUser, int idRole)
-        {
-            return await _userRepository.ExistRoleInUserAsync(idUser, idRole);
         }
     }
 }
