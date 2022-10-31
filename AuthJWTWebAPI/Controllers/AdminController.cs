@@ -1,4 +1,5 @@
-﻿using Core.DTO.User;
+﻿using Core.DTO.Response;
+using Core.DTO.User;
 using Core.Entities.Auth;
 using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,8 @@ namespace AuthJWTWebAPI.Controllers
         [HttpPost("user/add")]
         public async Task<IActionResult> AddUser(CreateUserDTO createUser)
         {
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
+
             if (ModelState.IsValid)
             {
                 User user = new User
@@ -38,32 +41,49 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (isUserInDatabase == null)
                 {
-                    return NotFound("Error System: The System can not validate if the user exists");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error System: The System can not validate if the user exists";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
                 if (isUserInDatabase.Value)
                 {
-                    return BadRequest("Can not create user because it already exists");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Can not create user because it already exists";
+
+                    return BadRequest(responseGeneralDTO);
                 }
 
                 int? newId = await _adminService.AddUserAndReturnIdAsync(user, createUser.idRole);
 
                 if (newId == 0)
                 {
-                    return NotFound("Error System: The System can not add the user");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error System: The System can not add the user";
+                    return NotFound(responseGeneralDTO);
                 }
 
                 if (newId == null)
                 {
-                    return BadRequest("The user can not be created");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "The user can not be created";
+
+                    return BadRequest(responseGeneralDTO);
                 }
 
                 user.Id = newId.Value;
 
-                return Ok("The user has been created");
+                responseGeneralDTO.Result = 1;
+                responseGeneralDTO.Mesagge = "The user has been created";
+
+                return Ok(responseGeneralDTO);
             }
 
-            return BadRequest("Insert all the flieds");
+            responseGeneralDTO.Result = 0;
+            responseGeneralDTO.Mesagge = "Insert all the flieds";
+
+            return BadRequest(responseGeneralDTO);
         }
 
 
@@ -71,19 +91,30 @@ namespace AuthJWTWebAPI.Controllers
         [HttpDelete()]
         public async Task<IActionResult> DeleteUser(int id)
         {
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
+
             var responseDelete = await _adminService.DeleteUserAsync(id);
 
             if (responseDelete == null)
             {
-                return NotFound("Error System: The System can not delete the user");
+                responseGeneralDTO.Result = 0;
+                responseGeneralDTO.Mesagge = "Error System: The System can not delete the user";
+
+                return NotFound(responseGeneralDTO);
             }
 
             if (!responseDelete.Value)
             {
-                return NotFound("Error: The user can not delete");
+                responseGeneralDTO.Result = 0;
+                responseGeneralDTO.Mesagge = "Error: The user can not delete";
+
+                return NotFound(responseGeneralDTO);
             }
 
-            return Ok("The user has been deleted");
+            responseGeneralDTO.Result = 1;
+            responseGeneralDTO.Mesagge = "The user has been deleted";
+
+            return Ok(responseGeneralDTO);
         }
 
 
@@ -91,24 +122,38 @@ namespace AuthJWTWebAPI.Controllers
         [HttpDelete()]
         public async Task<IActionResult> DeleteRoleInUser([FromBody] UserRoleDTO deleteUserRoleOfUser)
         {
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
+
             if (ModelState.IsValid)
             {
                 var responseDeleteRoleInUser = await _adminService.DeleteRoleInUserAsync(deleteUserRoleOfUser.IdUser, deleteUserRoleOfUser.IdRole);
 
                 if (responseDeleteRoleInUser == null)
                 {
-                    return NotFound("Error System: The System can not delete the role in the user");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error System: The System can not delete the role in the user";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
                 if (!responseDeleteRoleInUser.Value)
                 {
-                    return NotFound("Error: The role of user can not delete");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error: The role of user can not delete";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
-                return Ok("The role of user has been deleted");
+                responseGeneralDTO.Result = 1;
+                responseGeneralDTO.Mesagge = "The role of user has been deleted";
+
+                return Ok(responseGeneralDTO);
             }
 
-            return BadRequest("Insert all the flieds");
+            responseGeneralDTO.Result = 0;
+            responseGeneralDTO.Mesagge = "Insert all the flieds";
+
+            return BadRequest(responseGeneralDTO);
         }
 
 
@@ -116,36 +161,56 @@ namespace AuthJWTWebAPI.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddRoleInUser([FromBody] UserRoleDTO deleteUserRoleOfUser)
         {
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
+
             if (ModelState.IsValid)
             {
                 var responseExistRoleInUser = await _adminService.ExistRoleInUserAsync(deleteUserRoleOfUser.IdUser, deleteUserRoleOfUser.IdRole);
 
                 if (responseExistRoleInUser == null)
                 {
-                    return NotFound("Error: System can not validate the role");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error: System can not validate the role";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
                 if (responseExistRoleInUser.Value)
                 {
-                    return Ok("Error: The user already has the role");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error: The user already has the role";
+
+                    return Ok(responseGeneralDTO);
                 }
 
                 var responseDeleteRoleInUser = await _adminService.AddRoleInUserAsync(deleteUserRoleOfUser.IdUser, deleteUserRoleOfUser.IdRole);
 
                 if (responseDeleteRoleInUser == null)
                 {
-                    return NotFound("Error System: The System can not save the role in the user");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error System: The System can not save the role in the user";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
                 if (!responseDeleteRoleInUser.Value)
                 {
-                    return NotFound("Error: The role of user can not saved");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error: The role of user can not saved";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
-                return Ok("The role of user has been saved");
+                responseGeneralDTO.Result = 1;
+                responseGeneralDTO.Mesagge = "The role of user has been saved";
+
+                return Ok(responseGeneralDTO);
             }
 
-            return BadRequest("Insert all the flieds");
+            responseGeneralDTO.Result = 0;
+            responseGeneralDTO.Mesagge = "Insert all the flieds";
+
+            return BadRequest(responseGeneralDTO);
         }
     }
 }

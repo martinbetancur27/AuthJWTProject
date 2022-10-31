@@ -62,24 +62,32 @@ namespace AuthJWTWebAPI.Controllers
             return BadRequest("Insert all the flieds");
         }
 
+
         [AllowAnonymous]
         [Route("user/changepassword")]
         [HttpPut]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDTO)
         {
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
+
             if (ModelState.IsValid)
             {
-
                 if (changePasswordDTO.NewPassword != changePasswordDTO.NewPasswordAgain)
                 {
-                    return BadRequest("New password dont match");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "New password dont match";
+
+                    return BadRequest(responseGeneralDTO);
                 }
 
                 User? user = await _userService.GetUserAsync(changePasswordDTO.Username, changePasswordDTO.CurrentPassword);
 
                 if (user == null)
                 {
-                    return NotFound("User not found");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "User not found";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
                 user.Password = EncryptTool.GetSHA256OfString(changePasswordDTO.NewPassword);
@@ -88,13 +96,22 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (responseChangePassword == null)
                 {
-                    return NotFound("System can not change password");
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "System can not change password";
+
+                    return NotFound(responseGeneralDTO);
                 }
 
-                return Ok("Succes: Change password");
+                responseGeneralDTO.Result = 1;
+                responseGeneralDTO.Mesagge = "Password changed";
+
+                return Ok(responseGeneralDTO);
             }
 
-            return BadRequest("Insert all the flieds");
+            responseGeneralDTO.Result = 0;
+            responseGeneralDTO.Mesagge = "Insert all the flieds";
+
+            return BadRequest(responseGeneralDTO);
         }
     }
 }
