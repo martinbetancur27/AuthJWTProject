@@ -8,6 +8,6 @@ namespace Core.Constants
 {
     public static class TokenConstants
     {
-        public const int ExpireInMinutes = 5;
+        public const int ExpireInMinutes = 60;
     }
 }
