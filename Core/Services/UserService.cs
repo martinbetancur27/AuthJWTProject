@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Core.Tools;
+using Core.Constants;
 
 namespace Core.Services
 {
@@ -52,7 +53,7 @@ namespace Core.Services
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Audience"],
               identity.Claims,
-              expires: DateTime.Now.AddMinutes(15),
+              expires: DateTime.Now.AddMinutes(TokenConstants.ExpireInMinutes),
               signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

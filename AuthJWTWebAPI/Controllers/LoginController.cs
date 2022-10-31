@@ -1,4 +1,5 @@
-﻿using Core.DTO.Auth;
+﻿using Core.Constants;
+using Core.DTO.Auth;
 using Core.DTO.Response;
 using Core.Entities.Auth;
 using Core.Interfaces.Services;
@@ -50,6 +51,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 responseLoginDTO.Result = 1;
                 responseLoginDTO.Mesagge = "Succes";
+                responseLoginDTO.ExpireInMinutes = TokenConstants.ExpireInMinutes;
                 responseLoginDTO.Token = token;
 
                 return Ok(responseLoginDTO);
