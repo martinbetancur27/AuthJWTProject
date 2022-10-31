@@ -17,10 +17,12 @@ namespace AuthJWTWebAPI.Controllers
     {
         
         private readonly IUserService _userService;
+        private readonly ITokenService _tokenService;
 
-        public LoginController( IUserService userService)
+        public LoginController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         [AllowAnonymous]
@@ -40,7 +42,7 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseLoginDTO);
                 }
 
-                var token = _userService.GenerateToken(user);
+                var token = _tokenService.GenerateToken(user);
 
                 if (token == null)
                 {
