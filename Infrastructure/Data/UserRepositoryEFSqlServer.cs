@@ -19,6 +19,26 @@ namespace Infrastructure.Data
         }
 
 
+        public async Task<bool?> IsUserInDatabaseAsync(string userName)
+        {
+            try
+            {
+                var user = await _databaseContext.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+        }
+
+
         public async Task<User?> GetUserLoginOfDatabaseAsync(string userName, string password)
         {
             try

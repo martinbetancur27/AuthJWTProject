@@ -9,6 +9,7 @@ namespace Core.Interfaces.Services
 {
     public interface IAdminService
     {
+        public Task<bool?> IsUserInDatabaseAsync(string userName);
         public Task<int?> AddUserAndReturnIdAsync(User editor, int? idRole = null);
         public Task<bool?> DeleteUserAsync(int idUser);
         public Task<bool?> DeleteRoleInUserAsync(int idUser, int idRole);

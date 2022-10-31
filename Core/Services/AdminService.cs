@@ -19,6 +19,11 @@ namespace Core.Services
             _userRepository = userRepository;
         }
 
+        public async Task<bool?> IsUserInDatabaseAsync(string userName)
+        {
+            return await _userRepository.IsUserInDatabaseAsync(userName);
+        }
+
         public async Task<int?> AddUserAndReturnIdAsync(User editor, int? idRole = null)
         {
             editor.Password = EncryptTool.GetSHA256OfString(editor.Password);

@@ -34,6 +34,18 @@ namespace AuthJWTWebAPI.Controllers
                     Password = createUser.Password
                 };
 
+                var isUserInDatabase = await _adminService.IsUserInDatabaseAsync(createUser.UserName);
+
+                if (isUserInDatabase == null)
+                {
+                    return NotFound("Error System: The System can not validate if the user exists");
+                }
+
+                if (isUserInDatabase.Value)
+                {
+                    return BadRequest("Can not create user because it already exists");
+                }
+
                 int? newId = await _adminService.AddUserAndReturnIdAsync(user, createUser.idRole);
 
                 if (newId == 0)

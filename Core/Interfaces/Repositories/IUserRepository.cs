@@ -11,6 +11,7 @@ namespace Core.Interfaces.Repositories
     {
         public Task<User?> GetUserLoginOfDatabaseAsync(string userName, string password);
         public Task<User?> GetUserByIdOfDatabaseAsync(int idUser);
+        public Task<bool?> IsUserInDatabaseAsync(string userName);
         public Task<int?> AddUserDatabaseAndReturnIdAsync(User user, int? idRole = null);
         public Task<bool?> AddRoleInUserAsync(int idUser, int idRole);
         public Task<bool?> DeleteUserByIdOfDatabaseAsync(int idUser);
