@@ -87,8 +87,7 @@ namespace AuthJWTWebAPI.Controllers
         }
 
 
-        [Route("user/delete/{id:int}")]
-        [HttpDelete()]
+        [HttpDelete("user/delete/{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
@@ -118,8 +117,7 @@ namespace AuthJWTWebAPI.Controllers
         }
 
 
-        [Route("user/deleterole")]
-        [HttpDelete()]
+        [HttpDelete("user/deleterole")]
         public async Task<IActionResult> DeleteRoleInUser([FromBody] UserRoleDTO deleteRoleInUser)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
@@ -167,8 +165,7 @@ namespace AuthJWTWebAPI.Controllers
         }
 
 
-        [Route("user/addrole")]
-        [HttpPost()]
+        [HttpPost("user/addrole")]
         public async Task<IActionResult> AddRoleInUser([FromBody] UserRoleDTO newRoleInUser)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();

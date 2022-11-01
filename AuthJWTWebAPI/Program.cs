@@ -1,3 +1,4 @@
+using AuthJWTWebAPI.Middleware;
 using Core.DTO.Auth;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
@@ -52,6 +53,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

@@ -21,21 +21,14 @@ namespace Infrastructure.Data
 
         public async Task<bool?> IsUserInDatabaseAsync(string userName)
         {
-            try
-            {
-                var user = await _databaseContext.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
+            var user = await _databaseContext.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
 
-                if (user == null)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            catch (System.Exception)
+            if (user == null)
             {
-                return null;
+                return false;
             }
+
+            return true;
         }
 
 

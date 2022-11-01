@@ -64,8 +64,7 @@ namespace AuthJWTWebAPI.Controllers
 
 
         [AllowAnonymous]
-        [Route("user/changepassword")]
-        [HttpPut]
+        [HttpPut("user/changepassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDTO)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
