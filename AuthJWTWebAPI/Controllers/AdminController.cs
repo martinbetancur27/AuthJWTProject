@@ -39,15 +39,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 var isUserInDatabase = await _adminService.IsUserInDatabaseAsync(createUser.UserName);
 
-                if (isUserInDatabase == null)
-                {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error System: The System can not validate if the user exists";
-
-                    return NotFound(responseGeneralDTO);
-                }
-
-                if (isUserInDatabase.Value)
+                if (isUserInDatabase)
                 {
                     responseGeneralDTO.Result = 0;
                     responseGeneralDTO.Mesagge = "Can not create user because it already exists";
@@ -56,13 +48,6 @@ namespace AuthJWTWebAPI.Controllers
                 }
 
                 int? newId = await _adminService.AddUserAndReturnIdAsync(user, createUser.idRole);
-
-                if (newId == 0)
-                {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error System: The System can not add the user";
-                    return NotFound(responseGeneralDTO);
-                }
 
                 if (newId == null)
                 {
@@ -94,15 +79,7 @@ namespace AuthJWTWebAPI.Controllers
 
             var responseDelete = await _adminService.DeleteUserAsync(id);
 
-            if (responseDelete == null)
-            {
-                responseGeneralDTO.Result = 0;
-                responseGeneralDTO.Mesagge = "Error System: The System can not delete the user";
-
-                return NotFound(responseGeneralDTO);
-            }
-
-            if (!responseDelete.Value)
+            if (!responseDelete)
             {
                 responseGeneralDTO.Result = 0;
                 responseGeneralDTO.Mesagge = "Error: The user can not delete";
@@ -136,15 +113,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 var responseDeleteRoleInUser = await _adminService.DeleteRoleInUserAsync(roleInUserFromDb);
 
-                if (responseDeleteRoleInUser == null)
-                {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error System: The role in the user can not delete";
-
-                    NotFound(responseGeneralDTO);
-                }
-
-                if (!responseDeleteRoleInUser.Value)
+                if (!responseDeleteRoleInUser)
                 {
                     responseGeneralDTO.Result = 0;
                     responseGeneralDTO.Mesagge = "Error: The role of user can not delete";
@@ -184,15 +153,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 var responseAddRoleInUser = await _adminService.AddRoleInUserAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
 
-                if (responseAddRoleInUser == null)
-                {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error System: The System can not save the role in the user";
-
-                    return NotFound(responseGeneralDTO);
-                }
-
-                if (!responseAddRoleInUser.Value)
+                if (!responseAddRoleInUser)
                 {
                     responseGeneralDTO.Result = 0;
                     responseGeneralDTO.Mesagge = "Error: The role in the user can not saved";

@@ -19,7 +19,7 @@ namespace Core.Services
             _userRepository = userRepository;
         }
 
-        public async Task<bool?> IsUserInDatabaseAsync(string userName)
+        public async Task<bool> IsUserInDatabaseAsync(string userName)
         {
             return await _userRepository.IsUserInDatabaseAsync(userName);
         }
@@ -30,12 +30,12 @@ namespace Core.Services
             return await _userRepository.AddUserDatabaseAndReturnIdAsync(editor, idRole);
         }
 
-        public async Task<bool?> DeleteUserAsync(int idUser)
+        public async Task<bool> DeleteUserAsync(int idUser)
         {
             return await _userRepository.DeleteUserByIdOfDatabaseAsync(idUser);
         }
 
-        public async Task<bool?> DeleteRoleInUserAsync(UserRole userRole)
+        public async Task<bool> DeleteRoleInUserAsync(UserRole userRole)
         {
             return await _userRepository.DeleteRoleInUserAsync(userRole);
         }
@@ -45,7 +45,7 @@ namespace Core.Services
             return await _userRepository.GetUserRoleDatabaseAsync(idUser, idRole);
         }
 
-        public async Task<bool?> AddRoleInUserAsync(int idUser, int idRole)
+        public async Task<bool> AddRoleInUserAsync(int idUser, int idRole)
         {
             return await _userRepository.AddRoleInUserAsync(idUser, idRole);
         }

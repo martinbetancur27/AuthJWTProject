@@ -11,6 +11,6 @@ namespace Core.Interfaces.Services
     {
         public Task<User?> GetUserAsync(string userName, string password);
         public Task<User?> GetUserByIdOfDatabaseAsync(int idUser);
-        public bool? ChangePassword(User user);
+        public bool ChangePassword(User user);
     }
 }

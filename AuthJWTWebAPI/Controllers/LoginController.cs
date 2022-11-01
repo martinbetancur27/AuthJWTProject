@@ -93,14 +93,6 @@ namespace AuthJWTWebAPI.Controllers
 
                 var responseChangePassword = _userService.ChangePassword(user);
 
-                if (responseChangePassword == null)
-                {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "System can not change password";
-
-                    return NotFound(responseGeneralDTO);
-                }
-
                 responseGeneralDTO.Result = 1;
                 responseGeneralDTO.Mesagge = "Password changed";
 

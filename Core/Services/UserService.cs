@@ -36,7 +36,7 @@ namespace Core.Services
         }
 
 
-        public bool? ChangePassword(User user)
+        public bool ChangePassword(User user)
         {
             return _userRepository.ChangePassword(user);
         }

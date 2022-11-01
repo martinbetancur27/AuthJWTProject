@@ -19,7 +19,7 @@ namespace Infrastructure.Data
         }
 
 
-        public async Task<bool?> IsUserInDatabaseAsync(string userName)
+        public async Task<bool> IsUserInDatabaseAsync(string userName)
         {
             var user = await _databaseContext.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
 
@@ -34,169 +34,106 @@ namespace Infrastructure.Data
 
         public async Task<User?> GetUserLoginOfDatabaseAsync(string userName, string password)
         {
-            try
-            {
-                return await _databaseContext.Users.Where(x => x.UserName == userName && x.Password == password).Include(r => r.Roles).FirstOrDefaultAsync();
-            }
-            catch (System.Exception)
-            {
-                return null;
-            }
+            return await _databaseContext.Users.Where(x => x.UserName == userName && x.Password == password).Include(r => r.Roles).FirstOrDefaultAsync();
         }
 
 
         public async Task<User?> GetUserByIdOfDatabaseAsync(int idUser)
-        {
-            try
-            {
-                return await _databaseContext.Users.FindAsync(idUser);
-            }
-            catch (System.Exception)
-            {
-                return null;
-            }
+        {   
+            return await _databaseContext.Users.FindAsync(idUser);
         }
 
 
         public async Task<int?> AddUserDatabaseAndReturnIdAsync(User user, int? idRole = null)
         {
-            try
-            {
-                await _databaseContext.Users.AddAsync(user);
-                await _databaseContext.SaveChangesAsync();
+            await _databaseContext.Users.AddAsync(user);
+            await _databaseContext.SaveChangesAsync();
 
-                if (user.Id != null && idRole != null)
-                {
-                    var responseUserRole = await AddRoleInUserAsync(user.Id, idRole.Value);
+            if (user.Id != null && idRole != null)
+            {
+                var responseUserRole = await AddRoleInUserAsync(user.Id, idRole.Value);
                     
-                    if (!responseUserRole.Value)
-                    {
-                        DeleteUserByIdOfDatabaseAsync(user.Id);
-                        return null;
-                    }
+                if (!responseUserRole)
+                {
+                    await DeleteUserByIdOfDatabaseAsync(user.Id);
+                    return null;
                 }
+            }
                 
-                return user.Id;
-            }
-            catch (System.Exception)
-            {
-                return 0;
-            }
+            return user.Id;
         }
 
 
-        public async Task<bool?> AddRoleInUserAsync(int idUser, int idRole)
+        public async Task<bool> AddRoleInUserAsync(int idUser, int idRole)
         {
-            try
+            UserRole userRole = new UserRole
             {
-                UserRole userRole = new UserRole
-                {
-                    IdUser = idUser,
-                    IdRole = idRole
-                };
+                IdUser = idUser,
+                IdRole = idRole
+            };
 
-                await _databaseContext.UserRoles.AddAsync(userRole);
-                await _databaseContext.SaveChangesAsync();
+            await _databaseContext.UserRoles.AddAsync(userRole);
+            await _databaseContext.SaveChangesAsync();
 
-                return true;
-            }
-            catch (System.Exception)
-            {
-                return null;
-            }
+            return true;
         }
 
 
-        public async Task<bool?> ExistRoleInUserAsync(int idUser, int idRole)
+        public async Task<bool> ExistRoleInUserAsync(int idUser, int idRole)
         {
-            try
-            {
-                var responseSearch = await _databaseContext.UserRoles.Where(x => x.IdUser == idUser && x.IdRole == idRole).FirstOrDefaultAsync();
+            var responseSearch = await _databaseContext.UserRoles.Where(x => x.IdUser == idUser && x.IdRole == idRole).FirstOrDefaultAsync();
                 
-                if (responseSearch == null)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            catch (System.Exception)
+            if (responseSearch == null)
             {
-                return null;
+                return false;
             }
+
+            return true;
         }
 
 
-        public async Task<bool?> DeleteUserByIdOfDatabaseAsync(int idUser)
+        public async Task<bool> DeleteUserByIdOfDatabaseAsync(int idUser)
+        {   
+            var userFromDb = await GetUserByIdOfDatabaseAsync(idUser);
+
+            if (userFromDb == null)
+            {
+                return false;
+            }
+
+            _databaseContext.Users.Remove(userFromDb);
+            await _databaseContext.SaveChangesAsync();
+
+            return true;
+        }
+
+
+        public async Task<bool> DeleteRoleInUserAsync(UserRole userRole)
         {
-            try
-            {
-                var userFromDb = await GetUserByIdOfDatabaseAsync(idUser);
+            _databaseContext.UserRoles.Remove(userRole);                
+            await _databaseContext.SaveChangesAsync();
 
-                if (userFromDb == null)
-                {
-                    return false;
-                }
-
-                _databaseContext.Users.Remove(userFromDb);
-                await _databaseContext.SaveChangesAsync();
-
-                return true;
-            }
-            catch (System.Exception)
-            {
-                return null;
-            }
-        }
-
-
-        public async Task<bool?> DeleteRoleInUserAsync(UserRole userRole)
-        {
-            try
-            {
-                _databaseContext.UserRoles.Remove(userRole);                
-                await _databaseContext.SaveChangesAsync();
-
-                return true;
-            }
-            catch (System.Exception)
-            {
-                return null;
-            }
-        }
+            return true;
+    }
 
 
         public async Task<UserRole?> GetUserRoleDatabaseAsync(int idUser, int idRole)
         {
-            try
-            {
-                return await _databaseContext.UserRoles.Where(x => x.IdUser == idUser && x.IdRole == idRole).FirstOrDefaultAsync();
-            }
-            catch (System.Exception)
-            {
-                return null;
-            }
+            return await _databaseContext.UserRoles.Where(x => x.IdUser == idUser && x.IdRole == idRole).FirstOrDefaultAsync();
         }
 
 
-        public bool? ChangePassword(User user)
+        public bool ChangePassword(User user)
         {
-            try
+            if (user == null)
             {
-                if (user == null)
-                {
-                    return false;
-                }
-
-                _databaseContext.Users.Update(user);
-                _databaseContext.SaveChanges();
-
-                return true;
+                return false;
             }
-            catch (System.Exception)
-            {
-                return null;
-            }
+
+            _databaseContext.Users.Update(user);
+            _databaseContext.SaveChanges();
+
+            return true;           
         }
     }
 }
