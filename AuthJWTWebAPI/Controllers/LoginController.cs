@@ -63,7 +63,7 @@ namespace AuthJWTWebAPI.Controllers
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO
             {
                 StatusCode = 500,
-                Message = "Insert all the flieds"
+                Message = "Insert all the fields"
             };
 
             return BadRequest(responseGeneralDTO);
@@ -107,7 +107,7 @@ namespace AuthJWTWebAPI.Controllers
             }
 
             responseGeneralDTO.StatusCode = 400;
-            responseGeneralDTO.Message = "Insert all the flieds";
+            responseGeneralDTO.Message = "Insert all the fields";
 
             return BadRequest(responseGeneralDTO);
         }
