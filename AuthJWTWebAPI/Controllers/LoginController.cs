@@ -73,8 +73,8 @@ namespace AuthJWTWebAPI.Controllers
             {
                 if (changePasswordDTO.NewPassword != changePasswordDTO.NewPasswordAgain)
                 {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "New password dont match";
+                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.Message = "New password dont match";
 
                     return BadRequest(responseGeneralDTO);
                 }
@@ -83,8 +83,8 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (user == null)
                 {
-                    responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "User not found";
+                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.Message = "User not found";
 
                     return NotFound(responseGeneralDTO);
                 }
@@ -93,14 +93,14 @@ namespace AuthJWTWebAPI.Controllers
 
                 var responseChangePassword = _userService.ChangePassword(user);
 
-                responseGeneralDTO.Result = 1;
-                responseGeneralDTO.Mesagge = "Password changed";
+                responseGeneralDTO.StatusCode = 1;
+                responseGeneralDTO.Message = "Password changed";
 
                 return Ok(responseGeneralDTO);
             }
 
-            responseGeneralDTO.Result = 0;
-            responseGeneralDTO.Mesagge = "Insert all the flieds";
+            responseGeneralDTO.StatusCode = 0;
+            responseGeneralDTO.Message = "Insert all the flieds";
 
             return BadRequest(responseGeneralDTO);
         }

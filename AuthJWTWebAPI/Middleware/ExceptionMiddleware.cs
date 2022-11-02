@@ -36,8 +36,8 @@ namespace AuthJWTWebAPI.Middleware
 
             await context.Response.WriteAsync(new ResponseGeneralDTO()
             {
-                Result = context.Response.StatusCode,
-                Mesagge = "Internal Server Error."
+                StatusCode = context.Response.StatusCode,
+                Message = "Internal Server Error."
             }.ToString());
         }
     }

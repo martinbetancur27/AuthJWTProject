@@ -9,8 +9,8 @@ namespace Core.DTO.Response
 {
     public class ResponseGeneralDTO
     {
-        public int Result { get; set; }
-        public string Mesagge { get; set; }
+        public int StatusCode { get; set; }
+        public string Message { get; set; }
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);

@@ -67,8 +67,8 @@ app.UseStatusCodePages(async statusCodeContext =>
     await statusCodeContext.HttpContext.Response.WriteAsync(
         new ResponseGeneralDTO()
         {
-            Result = statusCodeContext.HttpContext.Response.StatusCode,
-            Mesagge = ""}.ToString());
+            StatusCode = statusCodeContext.HttpContext.Response.StatusCode,
+            Message = ""}.ToString());
 });
 
 app.UseStaticFiles();
