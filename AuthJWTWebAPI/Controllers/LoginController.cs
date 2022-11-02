@@ -37,7 +37,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (user == null)
                 {
-                    responseLoginDTO.Result = 0;
+                    responseLoginDTO.Result = 404;
                     responseLoginDTO.Mesagge = "User not found";
                     return NotFound(responseLoginDTO);
                 }
@@ -46,12 +46,13 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (token == null)
                 {
-                    responseLoginDTO.Result = 0;
+                    responseLoginDTO.Result = 404;
                     responseLoginDTO.Mesagge = "Can not create token";
+
                     return NotFound(responseLoginDTO);
                 }
 
-                responseLoginDTO.Result = 1;
+                responseLoginDTO.Result = 200;
                 responseLoginDTO.Mesagge = "Succes";
                 responseLoginDTO.ExpireInMinutes = TokenConstants.ExpireInMinutes;
                 responseLoginDTO.Token = token;
@@ -59,7 +60,13 @@ namespace AuthJWTWebAPI.Controllers
                 return Ok(responseLoginDTO);
             }
 
-            return BadRequest("Insert all the flieds");
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO
+            {
+                StatusCode = 500,
+                Message = "Insert all the flieds"
+            };
+
+            return BadRequest(responseGeneralDTO);
         }
 
 
@@ -73,7 +80,7 @@ namespace AuthJWTWebAPI.Controllers
             {
                 if (changePasswordDTO.NewPassword != changePasswordDTO.NewPasswordAgain)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 400;
                     responseGeneralDTO.Message = "New password dont match";
 
                     return BadRequest(responseGeneralDTO);
@@ -83,7 +90,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (user == null)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 404;
                     responseGeneralDTO.Message = "User not found";
 
                     return NotFound(responseGeneralDTO);
@@ -93,13 +100,13 @@ namespace AuthJWTWebAPI.Controllers
 
                 var responseChangePassword = _userService.ChangePassword(user);
 
-                responseGeneralDTO.StatusCode = 1;
+                responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "Password changed";
 
                 return Ok(responseGeneralDTO);
             }
 
-            responseGeneralDTO.StatusCode = 0;
+            responseGeneralDTO.StatusCode = 400;
             responseGeneralDTO.Message = "Insert all the flieds";
 
             return BadRequest(responseGeneralDTO);

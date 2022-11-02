@@ -36,7 +36,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (!isRoleInDatabase)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 404;
                     responseGeneralDTO.Message = "Error: The id role does not exist";
 
                     return NotFound(responseGeneralDTO);
@@ -46,7 +46,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (isUserInDatabase)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 400;
                     responseGeneralDTO.Message = "Can not create user because username already exists";
 
                     return BadRequest(responseGeneralDTO);
@@ -66,13 +66,13 @@ namespace AuthJWTWebAPI.Controllers
 
                 await _adminService.AddUserWithRoleAndReturnIdUserAsync(user, userRole);
 
-                responseGeneralDTO.StatusCode = 1;
+                responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "The user has been created";
 
                 return Ok(responseGeneralDTO);
             }
 
-            responseGeneralDTO.StatusCode = 0;
+            responseGeneralDTO.StatusCode = 400;
             responseGeneralDTO.Message = "Insert all the flieds";
 
             return BadRequest(responseGeneralDTO);
@@ -90,7 +90,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (isUserInDatabase)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 400;
                     responseGeneralDTO.Message = "Can not create user because username already exists";
 
                     return BadRequest(responseGeneralDTO);
@@ -105,13 +105,13 @@ namespace AuthJWTWebAPI.Controllers
 
                 await _adminService.AddUserAndReturnIdAsync(user);
 
-                responseGeneralDTO.StatusCode = 1;
+                responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "The user has been created";
 
                 return Ok(responseGeneralDTO);
             }
 
-            responseGeneralDTO.StatusCode = 0;
+            responseGeneralDTO.StatusCode = 400;
             responseGeneralDTO.Message = "Insert all the flieds";
 
             return BadRequest(responseGeneralDTO);
@@ -127,7 +127,7 @@ namespace AuthJWTWebAPI.Controllers
 
             if (!isUserInDatabase)
             {
-                responseGeneralDTO.StatusCode = 0;
+                responseGeneralDTO.StatusCode = 404;
                 responseGeneralDTO.Message = "Error: user id does not exist";
 
                 return NotFound(responseGeneralDTO);
@@ -135,7 +135,7 @@ namespace AuthJWTWebAPI.Controllers
 
             await _adminService.DeleteUserAsync(id);
 
-            responseGeneralDTO.StatusCode = 1;
+            responseGeneralDTO.StatusCode = 200;
             responseGeneralDTO.Message = "The user has been deleted";
 
             return Ok(responseGeneralDTO);
@@ -153,7 +153,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (!isUserInDatabase)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 404;
                     responseGeneralDTO.Message = "Error: The id user does not exist";
 
                     return NotFound(responseGeneralDTO);
@@ -163,7 +163,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (!isRoleInDatabase)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 404;
                     responseGeneralDTO.Message = "Error: The id role user does not exist";
 
                     return NotFound(responseGeneralDTO);
@@ -173,7 +173,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (roleInUserFromDb == null)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 400;
                     responseGeneralDTO.Message = "Error: The user does not have that role";
 
                     return BadRequest(responseGeneralDTO);
@@ -181,13 +181,13 @@ namespace AuthJWTWebAPI.Controllers
 
                 await _adminService.DeleteRoleInUserAsync(roleInUserFromDb);
 
-                responseGeneralDTO.StatusCode = 1;
+                responseGeneralDTO.StatusCode = 200;
                 responseGeneralDTO.Message = "The role of user has been deleted";
 
                 return Ok(responseGeneralDTO);
             }
 
-            responseGeneralDTO.StatusCode = 0;
+            responseGeneralDTO.StatusCode = 400;
             responseGeneralDTO.Message = "Insert all the flieds";
 
             return BadRequest(responseGeneralDTO);
@@ -205,7 +205,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (!isUserInDatabase)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 404;
                     responseGeneralDTO.Message = "Error: The id user does not exist";
 
                     return NotFound(responseGeneralDTO);
@@ -215,7 +215,7 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (!isRoleInDatabase)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 404;
                     responseGeneralDTO.Message = "Error: The id role user does not exist";
 
                     return NotFound(responseGeneralDTO);
@@ -225,21 +225,21 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (isRoleInUserFromDb)
                 {
-                    responseGeneralDTO.StatusCode = 0;
+                    responseGeneralDTO.StatusCode = 400;
                     responseGeneralDTO.Message = "Error: The user already has that role";
 
-                    return NotFound(responseGeneralDTO);
+                    return BadRequest(responseGeneralDTO);
                 }
 
                 await _adminService.AddRoleInUserAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
 
-                responseGeneralDTO.StatusCode = 1;
+                responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "The role in the user has been saved";
 
                 return Ok(responseGeneralDTO);
             }
 
-            responseGeneralDTO.StatusCode = 0;
+            responseGeneralDTO.StatusCode = 400;
             responseGeneralDTO.Message = "Insert all the flieds";
 
             return BadRequest(responseGeneralDTO);
