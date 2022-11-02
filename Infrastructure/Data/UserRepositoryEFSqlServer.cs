@@ -90,14 +90,8 @@ namespace Infrastructure.Data
         }
 
 
-        public async Task<bool> AddRoleInUserAsync(int idUser, int idRole)
+        public async Task<bool> AddRoleInUserAsync(UserRole userRole)
         {
-            UserRole userRole = new UserRole
-            {
-                IdUser = idUser,
-                IdRole = idRole
-            };
-
             await _databaseContext.UserRoles.AddAsync(userRole);
             await _databaseContext.SaveChangesAsync();
 
@@ -107,27 +101,13 @@ namespace Infrastructure.Data
 
         public async Task<bool> ExistRoleInUserAsync(int idUser, int idRole)
         {
-            var responseSearch = await _databaseContext.UserRoles.Where(x => x.IdUser == idUser && x.IdRole == idRole).FirstOrDefaultAsync();
-                
-            if (responseSearch == null)
-            {
-                return false;
-            }
-
-            return true;
+            return await _databaseContext.UserRoles.Where(x => x.IdUser == idUser && x.IdRole == idRole).AnyAsync();
         }
 
 
-        public async Task<bool> DeleteUserByIdOfDatabaseAsync(int idUser)
+        public async Task<bool> DeleteUserByIdOfDatabaseAsync(User user)
         {   
-            var userFromDb = await GetUserByIdOfDatabaseAsync(idUser);
-
-            if (userFromDb == null)
-            {
-                return false;
-            }
-
-            _databaseContext.Users.Remove(userFromDb);
+            _databaseContext.Users.Remove(user);
             await _databaseContext.SaveChangesAsync();
 
             return true;

@@ -62,7 +62,12 @@ namespace Core.Services
 
         public async Task<bool> DeleteUserAsync(int idUser)
         {
-            return await _userRepository.DeleteUserByIdOfDatabaseAsync(idUser);
+            User user = new User
+            {
+                Id = idUser
+            };
+
+            return await _userRepository.DeleteUserByIdOfDatabaseAsync(user);
         }
 
 
@@ -70,6 +75,7 @@ namespace Core.Services
         {
             return await _userRepository.DeleteRoleInUserAsync(userRole);
         }
+
 
         public async Task<UserRole?> GetUserRoleDatabaseAsync(int idUser, int idRole)
         {
@@ -79,7 +85,12 @@ namespace Core.Services
 
         public async Task<bool> AddRoleInUserAsync(int idUser, int idRole)
         {
-            return await _userRepository.AddRoleInUserAsync(idUser, idRole);
+            UserRole userRole = new UserRole
+            {
+                IdUser = idUser,
+                IdRole = idRole
+            };
+            return await _userRepository.AddRoleInUserAsync(userRole);
         }
     }
 }

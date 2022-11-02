@@ -26,7 +26,7 @@ namespace AuthJWTWebAPI.Controllers
 
 
         [HttpPost("user/addwithrole")]
-        public async Task<IActionResult> AddUserWithRole(CreateUserWithRole createUserWithRole)
+        public async Task<IActionResult> AddUserWithRole(CreateUserWithRoleDTO createUserWithRole)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
 
@@ -149,12 +149,32 @@ namespace AuthJWTWebAPI.Controllers
 
             if (ModelState.IsValid)
             {
+                var isUserInDatabase = await _adminService.IsUserInDatabaseByIdAsync(deleteRoleInUser.IdUser);
+
+                if (!isUserInDatabase)
+                {
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error: The id user does not exist";
+
+                    return NotFound(responseGeneralDTO);
+                }
+
+                var isRoleInDatabase = await _adminService.IsRoleInDatabaseAsync(deleteRoleInUser.IdRole);
+
+                if (!isRoleInDatabase)
+                {
+                    responseGeneralDTO.Result = 0;
+                    responseGeneralDTO.Mesagge = "Error: The id role user does not exist";
+
+                    return NotFound(responseGeneralDTO);
+                }
+
                 var roleInUserFromDb = await _adminService.GetUserRoleDatabaseAsync(deleteRoleInUser.IdUser, deleteRoleInUser.IdRole);
 
                 if (roleInUserFromDb == null)
                 {
                     responseGeneralDTO.Result = 0;
-                    responseGeneralDTO.Mesagge = "Error: The user does not have that role or not exists";
+                    responseGeneralDTO.Mesagge = "Error: The user does not have that role";
 
                     return BadRequest(responseGeneralDTO);
                 }

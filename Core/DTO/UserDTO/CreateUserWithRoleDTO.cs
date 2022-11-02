@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.DTO.UserDTO
 {
-    public class CreateUserWithRole
+    public class CreateUserWithRoleDTO
     {
         [Required]
         public string Name { get; set; }

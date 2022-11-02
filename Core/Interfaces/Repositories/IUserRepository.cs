@@ -17,8 +17,8 @@ namespace Core.Interfaces.Repositories
         public Task<bool> IsRoleInDatabaseAsync(int idRole);
         public Task<int?> AddUserAndReturnIdAsync(User user);
         public Task<int?> AddUserWithRoleAndReturnIdUserAsync(User user, UserRole userRole);
-        public Task<bool> AddRoleInUserAsync(int idUser, int idRole);
-        public Task<bool> DeleteUserByIdOfDatabaseAsync(int idUser);
+        public Task<bool> AddRoleInUserAsync(UserRole userRole);
+        public Task<bool> DeleteUserByIdOfDatabaseAsync(User user);
         public Task<bool> DeleteRoleInUserAsync(UserRole userRole);
         public Task<UserRole?> GetUserRoleDatabaseAsync(int idUser, int idRole);
         public bool ChangePassword(User user);
