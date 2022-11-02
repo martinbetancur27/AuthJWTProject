@@ -1,5 +1,6 @@
 using AuthJWTWebAPI.Middleware;
 using Core.DTO.Auth;
+using Core.DTO.Response;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Services;
@@ -57,6 +58,18 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseStatusCodePages(async statusCodeContext =>
+{
+    
+    statusCodeContext.HttpContext.Response.ContentType = "application/json";
+
+    await statusCodeContext.HttpContext.Response.WriteAsync(
+        new ResponseGeneralDTO()
+        {
+            Result = statusCodeContext.HttpContext.Response.StatusCode,
+            Mesagge = ""}.ToString());
+});
 
 app.UseStaticFiles();
 app.UseRouting();
