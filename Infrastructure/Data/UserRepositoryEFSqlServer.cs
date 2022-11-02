@@ -19,16 +19,27 @@ namespace Infrastructure.Data
         }
 
 
-        public async Task<bool> IsUserInDatabaseAsync(string userName)
+        public async Task<bool> IsUserInDatabaseByUsernameAsync(string userName)
         {
-            var user = await _databaseContext.Users.Where(x => x.UserName == userName).FirstOrDefaultAsync();
+            return await _databaseContext.Users.Where(x => x.UserName == userName).AnyAsync();
+        }
 
-            if (user == null)
-            {
-                return false;
-            }
 
-            return true;
+        public async Task<bool> IsUserInDatabaseByIdAsync(int idUser)
+        {
+            return await _databaseContext.Users.Where(x => x.Id == idUser).AnyAsync();
+        }
+
+
+        public async Task<bool> IsRoleInDatabaseAsync(int idRole)
+        {
+            return await _databaseContext.Roles.Where(x => x.Id == idRole).AnyAsync();
+        }
+
+
+        public async Task<bool> IsRoleInUserAsync(int idUser, int idRole)
+        {
+            return await _databaseContext.UserRoles.Where(x => x.IdUser == idUser && x.IdRole == idRole).AnyAsync();
         }
 
 
@@ -44,23 +55,38 @@ namespace Infrastructure.Data
         }
 
 
-        public async Task<int?> AddUserDatabaseAndReturnIdAsync(User user, int? idRole = null)
+        public async Task<int?> AddUserAndReturnIdAsync(User user)
         {
             await _databaseContext.Users.AddAsync(user);
             await _databaseContext.SaveChangesAsync();
 
-            if (user.Id != null && idRole != null)
+            return user.Id;
+        }
+
+
+        public async Task<int?> AddUserWithRoleAndReturnIdUserAsync(User user, UserRole userRole)
+        {
+            using (var transaction = await _databaseContext.Database.BeginTransactionAsync())
             {
-                var responseUserRole = await AddRoleInUserAsync(user.Id, idRole.Value);
-                    
-                if (!responseUserRole)
+                try
                 {
-                    await DeleteUserByIdOfDatabaseAsync(user.Id);
-                    return null;
+                    await _databaseContext.Users.AddAsync(user);
+                    await _databaseContext.SaveChangesAsync();
+
+                    userRole.IdUser = user.Id;
+                    await _databaseContext.UserRoles.AddAsync(userRole);
+                    await _databaseContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return user.Id;
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new Exception("Outer error", ex);
                 }
             }
-                
-            return user.Id;
         }
 
 
@@ -114,7 +140,7 @@ namespace Infrastructure.Data
             await _databaseContext.SaveChangesAsync();
 
             return true;
-    }
+        }
 
 
         public async Task<UserRole?> GetUserRoleDatabaseAsync(int idUser, int idRole)
@@ -125,11 +151,6 @@ namespace Infrastructure.Data
 
         public bool ChangePassword(User user)
         {
-            if (user == null)
-            {
-                return false;
-            }
-
             _databaseContext.Users.Update(user);
             _databaseContext.SaveChanges();
 

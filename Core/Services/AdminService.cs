@@ -19,21 +19,52 @@ namespace Core.Services
             _userRepository = userRepository;
         }
 
-        public async Task<bool> IsUserInDatabaseAsync(string userName)
+
+        public async Task<bool> IsUserInDatabaseByUsernameAsync(string userName)
         {
-            return await _userRepository.IsUserInDatabaseAsync(userName);
+            return await _userRepository.IsUserInDatabaseByUsernameAsync(userName);
         }
 
-        public async Task<int?> AddUserAndReturnIdAsync(User editor, int? idRole = null)
+
+        public async Task<bool> IsUserInDatabaseByIdAsync(int idUser)
         {
-            editor.Password = EncryptTool.GetSHA256OfString(editor.Password);
-            return await _userRepository.AddUserDatabaseAndReturnIdAsync(editor, idRole);
+            return await _userRepository.IsUserInDatabaseByIdAsync(idUser);
         }
+
+
+        public async Task<bool> IsRoleInDatabaseAsync(int idRole)
+        {
+            return await _userRepository.IsRoleInDatabaseAsync(idRole);
+        }
+
+
+        public async Task<bool> IsRoleInUserAsync(int idUser, int idRole)
+        {
+            return await _userRepository.IsRoleInUserAsync(idUser, idRole);
+        }
+
+
+        public async Task<int?> AddUserAndReturnIdAsync(User user)
+        {
+            user.Password = EncryptTool.GetSHA256OfString(user.Password);
+
+            return await _userRepository.AddUserAndReturnIdAsync(user);             
+        }
+
+
+        public async Task<int?> AddUserWithRoleAndReturnIdUserAsync(User user, UserRole userRole)
+        {
+            user.Password = EncryptTool.GetSHA256OfString(user.Password);
+
+            return await _userRepository.AddUserWithRoleAndReturnIdUserAsync(user, userRole);
+        }
+
 
         public async Task<bool> DeleteUserAsync(int idUser)
         {
             return await _userRepository.DeleteUserByIdOfDatabaseAsync(idUser);
         }
+
 
         public async Task<bool> DeleteRoleInUserAsync(UserRole userRole)
         {
@@ -44,6 +75,7 @@ namespace Core.Services
         {
             return await _userRepository.GetUserRoleDatabaseAsync(idUser, idRole);
         }
+
 
         public async Task<bool> AddRoleInUserAsync(int idUser, int idRole)
         {
