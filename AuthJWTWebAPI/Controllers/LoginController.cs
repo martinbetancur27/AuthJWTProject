@@ -16,12 +16,12 @@ namespace AuthJWTWebAPI.Controllers
     public class LoginController : ControllerBase
     {
         
-        private readonly IUserService _userService;
+        private readonly ILoginService _loginService;
         private readonly ITokenService _tokenService;
 
-        public LoginController(IUserService userService, ITokenService tokenService)
+        public LoginController(ILoginService loginService, ITokenService tokenService)
         {
-            _userService = userService;
+            _loginService = loginService;
             _tokenService = tokenService;
         }
 
@@ -33,7 +33,7 @@ namespace AuthJWTWebAPI.Controllers
             {
                 ResponseLoginDTO responseLoginDTO = new ResponseLoginDTO();
 
-                User? user = await _userService.GetUserAsync(userLogin.Username, userLogin.Password);
+                User? user = await _loginService.LoginAsync(userLogin.Username, userLogin.Password);
 
                 if (user == null)
                 {
@@ -86,7 +86,7 @@ namespace AuthJWTWebAPI.Controllers
                     return BadRequest(responseGeneralDTO);
                 }
 
-                User? user = await _userService.GetUserAsync(changePasswordDTO.Username, changePasswordDTO.CurrentPassword);
+                User? user = await _loginService.LoginAsync(changePasswordDTO.Username, changePasswordDTO.CurrentPassword);
 
                 if (user == null)
                 {
@@ -96,9 +96,7 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseGeneralDTO);
                 }
 
-                user.Password = EncryptTool.GetSHA256OfString(changePasswordDTO.NewPassword);
-
-                var responseChangePassword = _userService.ChangePassword(user);
+                _loginService.ChangePassword(user, changePasswordDTO.NewPassword);
 
                 responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "Password changed";

@@ -9,8 +9,11 @@ namespace Core.Interfaces.Services
 {
     public interface IUserService
     {
-        public Task<User?> GetUserAsync(string userName, string password);
-        public Task<User?> GetUserByIdOfDatabaseAsync(int idUser);
-        public bool ChangePassword(User user);
+        public Task<User?> GetByIdAsync(int idUser);
+        public Task<bool> IsUsernameRegisteredAsync(string userName);
+        public Task<bool> IsIdRegisteredAsync(int idUser);
+        public Task<int?> AddAndReturnIdAsync(User user);
+        public Task<bool> DeleteByIdAsync(int id);
+        public bool Update(User user);
     }
 }

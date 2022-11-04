@@ -17,11 +17,15 @@ namespace AuthJWTWebAPI.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly IAdminService _adminService;
+        private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
+        private readonly IRolesInUserService _rolesInUserService;
 
-        public AdminController(IAdminService adminService)
+        public AdminController(IUserService userService, IRoleService roleService, IRolesInUserService rolesInUserService)
         {
-            _adminService = adminService;
+            _userService = userService;
+            _roleService = roleService;
+            _rolesInUserService = rolesInUserService;
         }
 
 
@@ -32,7 +36,7 @@ namespace AuthJWTWebAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var isRoleInDatabase = await _adminService.IsRoleInDatabaseAsync(createUserWithRole.idRole);
+                var isRoleInDatabase = await _roleService.IsIdRegisteredAsync(createUserWithRole.idRole);
 
                 if (!isRoleInDatabase)
                 {
@@ -42,7 +46,7 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseGeneralDTO);
                 }
 
-                var isUserInDatabase = await _adminService.IsUserInDatabaseByUsernameAsync(createUserWithRole.UserName);
+                var isUserInDatabase = await _userService.IsUsernameRegisteredAsync(createUserWithRole.UserName);
 
                 if (isUserInDatabase)
                 {
@@ -64,7 +68,7 @@ namespace AuthJWTWebAPI.Controllers
                     Password = createUserWithRole.Password
                 };
 
-                await _adminService.AddUserWithRoleAndReturnIdUserAsync(user, userRole);
+                await _rolesInUserService.AddUserAndPutRoleAndReturnIdUserAsync(user, userRole);
 
                 responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "The user has been created";
@@ -86,7 +90,7 @@ namespace AuthJWTWebAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var isUserInDatabase = await _adminService.IsUserInDatabaseByUsernameAsync(createUser.UserName);
+                var isUserInDatabase = await _userService.IsUsernameRegisteredAsync(createUser.UserName);
 
                 if (isUserInDatabase)
                 {
@@ -103,7 +107,7 @@ namespace AuthJWTWebAPI.Controllers
                     Password = createUser.Password
                 };
 
-                await _adminService.AddUserAndReturnIdAsync(user);
+                await _userService.AddAndReturnIdAsync(user);
 
                 responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "The user has been created";
@@ -123,7 +127,7 @@ namespace AuthJWTWebAPI.Controllers
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
 
-            var isUserInDatabase = await _adminService.IsUserInDatabaseByIdAsync(id);
+            var isUserInDatabase = await _userService.IsIdRegisteredAsync(id);
 
             if (!isUserInDatabase)
             {
@@ -133,7 +137,7 @@ namespace AuthJWTWebAPI.Controllers
                 return NotFound(responseGeneralDTO);
             }
 
-            await _adminService.DeleteUserAsync(id);
+            await _userService.DeleteByIdAsync(id);
 
             responseGeneralDTO.StatusCode = 200;
             responseGeneralDTO.Message = "The user has been deleted";
@@ -149,7 +153,7 @@ namespace AuthJWTWebAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var isUserInDatabase = await _adminService.IsUserInDatabaseByIdAsync(deleteRoleInUser.IdUser);
+                var isUserInDatabase = await _userService.IsIdRegisteredAsync(deleteRoleInUser.IdUser);
 
                 if (!isUserInDatabase)
                 {
@@ -159,7 +163,7 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseGeneralDTO);
                 }
 
-                var isRoleInDatabase = await _adminService.IsRoleInDatabaseAsync(deleteRoleInUser.IdRole);
+                var isRoleInDatabase = await _roleService.IsIdRegisteredAsync(deleteRoleInUser.IdRole);
 
                 if (!isRoleInDatabase)
                 {
@@ -169,7 +173,7 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseGeneralDTO);
                 }
 
-                var roleInUserFromDb = await _adminService.GetUserRoleDatabaseAsync(deleteRoleInUser.IdUser, deleteRoleInUser.IdRole);
+                var roleInUserFromDb = await _rolesInUserService.GetByUserAndRoleAsync(deleteRoleInUser.IdUser, deleteRoleInUser.IdRole);
 
                 if (roleInUserFromDb == null)
                 {
@@ -179,7 +183,7 @@ namespace AuthJWTWebAPI.Controllers
                     return BadRequest(responseGeneralDTO);
                 }
 
-                await _adminService.DeleteRoleInUserAsync(roleInUserFromDb);
+                await _rolesInUserService.DeleteAsync(roleInUserFromDb);
 
                 responseGeneralDTO.StatusCode = 200;
                 responseGeneralDTO.Message = "The role of user has been deleted";
@@ -201,7 +205,7 @@ namespace AuthJWTWebAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var isUserInDatabase = await _adminService.IsUserInDatabaseByIdAsync(newRoleInUser.IdUser);
+                var isUserInDatabase = await _userService.IsIdRegisteredAsync(newRoleInUser.IdUser);
 
                 if (!isUserInDatabase)
                 {
@@ -211,7 +215,7 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseGeneralDTO);
                 }
 
-                var isRoleInDatabase = await _adminService.IsRoleInDatabaseAsync(newRoleInUser.IdRole);
+                var isRoleInDatabase = await _roleService.IsIdRegisteredAsync(newRoleInUser.IdRole);
 
                 if (!isRoleInDatabase)
                 {
@@ -221,7 +225,7 @@ namespace AuthJWTWebAPI.Controllers
                     return NotFound(responseGeneralDTO);
                 }
 
-                var isRoleInUserFromDb = await _adminService.IsRoleInUserAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
+                var isRoleInUserFromDb = await _rolesInUserService.IsRoleAndUserAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
 
                 if (isRoleInUserFromDb)
                 {
@@ -231,7 +235,7 @@ namespace AuthJWTWebAPI.Controllers
                     return BadRequest(responseGeneralDTO);
                 }
 
-                await _adminService.AddRoleInUserAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
+                await _rolesInUserService.AddAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
 
                 responseGeneralDTO.StatusCode = 201;
                 responseGeneralDTO.Message = "The role in the user has been saved";

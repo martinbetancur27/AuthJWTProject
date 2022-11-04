@@ -33,9 +33,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 });
 
 builder.Services.AddScoped<IUserRepository, UserRepositoryEFSqlServer>();
+builder.Services.AddScoped<IRoleRepository, RoleRepositoryEFSqlServer>();
+builder.Services.AddScoped<IUserRoleRepository, UserRoleRepositoryEFSqlServer>();
+
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRolesInUserService, RolesInUserService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 
 
 builder.Services.AddMvc();

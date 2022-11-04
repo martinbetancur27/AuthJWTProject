@@ -23,22 +23,46 @@ namespace Core.Services
         }
 
 
-        public async Task<User?> GetUserAsync(string userName, string password)
+        public async Task<User?> GetByIdAsync(int idUser)
         {
-            var passwordSha256 = EncryptTool.GetSHA256OfString(password);
-            return await _userRepository.GetUserLoginOfDatabaseAsync(userName, passwordSha256);
+            return await _userRepository.GetByIdAsync(idUser);
         }
 
 
-        public async Task<User?> GetUserByIdOfDatabaseAsync(int idUser)
+        public async Task<bool> IsUsernameRegisteredAsync(string userName)
         {
-            return await _userRepository.GetUserByIdOfDatabaseAsync(idUser);
+            return await _userRepository.IsUsernameRegisteredAsync(userName);
         }
 
 
-        public bool ChangePassword(User user)
+        public async Task<bool> IsIdRegisteredAsync(int idUser)
         {
-            return _userRepository.ChangePassword(user);
+            return await _userRepository.IsIdRegisteredAsync(idUser);
+        }
+
+
+        public async Task<int?> AddAndReturnIdAsync(User user)
+        {
+            user.Password = EncryptTool.GetSHA256OfString(user.Password);
+
+            return await _userRepository.AddAndReturnIdAsync(user);
+        }
+
+
+        public async Task<bool> DeleteByIdAsync(int idUser)
+        {
+            User user = new User
+            {
+                Id = idUser
+            };
+
+            return await _userRepository.DeleteAsync(user);
+        }
+
+
+        public bool Update(User user)
+        {
+            return _userRepository.Update(user);
         }
     }
 }
