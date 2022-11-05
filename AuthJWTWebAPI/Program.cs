@@ -5,6 +5,7 @@ using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using Core.Services;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -37,7 +38,7 @@ builder.Services.AddScoped<IRoleRepository, RoleRepositoryEFSqlServer>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepositoryEFSqlServer>();
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenService, IdentityTokenClaimService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRolesInUserService, RolesInUserService>();
 builder.Services.AddScoped<ILoginService, LoginService>();

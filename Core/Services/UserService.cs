@@ -4,12 +4,7 @@ using Core.Entities.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using Core.Tools;
-using Core.Constants;
 
 namespace Core.Services
 {

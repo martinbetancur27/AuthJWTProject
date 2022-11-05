@@ -11,13 +11,13 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Services
+namespace Infrastructure.Identity
 {
-    public class TokenService : ITokenService
+    public class IdentityTokenClaimService : ITokenService
     {
         private IConfiguration _config;
 
-        public TokenService(IConfiguration config)
+        public IdentityTokenClaimService(IConfiguration config)
         {
             _config = config;
         }

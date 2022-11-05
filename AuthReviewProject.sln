@@ -5,11 +5,11 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2EDE3189-68D0-4F7C-BD3F-2434F1BEB27E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{C977CE14-8251-4AE4-9537-FD725929CB98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{C977CE14-8251-4AE4-9537-FD725929CB98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{35AA0862-AAC4-4D20-AC9A-DAF1AA6EB8ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{35AA0862-AAC4-4D20-AC9A-DAF1AA6EB8ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthJWTWebAPI", "AuthJWTWebAPI\AuthJWTWebAPI.csproj", "{667B4769-0A7D-46CE-97EB-1A0B73BED739}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthJWTWebAPI", "AuthJWTWebAPI\AuthJWTWebAPI.csproj", "{667B4769-0A7D-46CE-97EB-1A0B73BED739}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
