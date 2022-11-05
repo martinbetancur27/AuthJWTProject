@@ -4,17 +4,18 @@ using Core.Entities.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Tools;
 
 namespace Core.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IEncryptService _encryptService;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, IEncryptService encryptService)
         {
             _userRepository = userRepository;
+            _encryptService = encryptService;
         }
 
 
@@ -38,7 +39,7 @@ namespace Core.Services
 
         public async Task<int?> AddAndReturnIdAsync(User user)
         {
-            user.Password = EncryptTool.GetSHA256OfString(user.Password);
+            user.Password = _encryptService.GetSHA256OfString(user.Password);
 
             return await _userRepository.AddAndReturnIdAsync(user);
         }

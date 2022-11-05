@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Core.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
 
-namespace Core.Tools
+namespace Infrastructure.Identity.Tools
 {
-    public static class EncryptTool
+    public class EncryptOfSystem : IEncryptService
     {
-        
-        public static string GetSHA256OfString(string value)
+        public string GetSHA256OfString(string value)
         {
             SHA256 sha256 = SHA256.Create();
             ASCIIEncoding encoding = new ASCIIEncoding();

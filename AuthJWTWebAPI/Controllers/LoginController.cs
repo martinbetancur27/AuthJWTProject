@@ -3,7 +3,6 @@ using Core.DTO.Auth;
 using Core.DTO.Response;
 using Core.Entities.Auth;
 using Core.Interfaces.Services;
-using Core.Tools;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,6 @@
 ﻿using Core.Entities.Auth;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using Core.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +12,12 @@ namespace Core.Services
     public class RolesInUserService : IRolesInUserService
     {
         private readonly IUserRoleRepository _userRoleRepository;
+        private readonly IEncryptService _encryptService;
 
-        public RolesInUserService(IUserRoleRepository userRoleRepository)
+        public RolesInUserService(IUserRoleRepository userRoleRepository, IEncryptService encryptService)
         {
             _userRoleRepository = userRoleRepository;
+            _encryptService = encryptService;
         }
 
 
@@ -33,7 +34,7 @@ namespace Core.Services
 
         public async Task<int?> AddUserAndPutRoleAndReturnIdUserAsync(User user, UserRole userRole)
         {
-            user.Password = EncryptTool.GetSHA256OfString(user.Password);
+            user.Password = _encryptService.GetSHA256OfString(user.Password);
 
             return await _userRoleRepository.AddUserAndPutRoleAndReturnIdUserAsync(user, userRole);
         }

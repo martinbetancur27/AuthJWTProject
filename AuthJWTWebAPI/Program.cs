@@ -6,6 +6,7 @@ using Core.Interfaces.Services;
 using Core.Services;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.Identity.Tools;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -42,6 +43,7 @@ builder.Services.AddScoped<ITokenService, IdentityTokenClaimService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRolesInUserService, RolesInUserService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IEncryptService, EncryptOfSystem>();
 
 
 builder.Services.AddMvc();
