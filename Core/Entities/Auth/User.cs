@@ -12,6 +12,6 @@ namespace Core.Entities.Auth
         public string Name { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        public ICollection<Role> Roles { get; set; }
+        public ICollection<Role>? Roles { get; set; }
     }
 }

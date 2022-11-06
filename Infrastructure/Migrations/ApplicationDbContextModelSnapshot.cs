@@ -90,7 +90,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("IdUser");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Auth.UserRole", b =>
