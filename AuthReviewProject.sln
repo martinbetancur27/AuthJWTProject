@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthJWTWebAPI", "AuthJWTWebAPI\AuthJWTWebAPI.csproj", "{667B4769-0A7D-46CE-97EB-1A0B73BED739}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{55C4198F-2E5B-42AC-B3A8-7A0C9A2611D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthReviewProject.Tests", "AuthReviewProject.Tests\AuthReviewProject.Tests.csproj", "{468D8EB5-08D8-4BFE-BD9B-4FD122104EB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,10 @@ Global
 		{667B4769-0A7D-46CE-97EB-1A0B73BED739}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{667B4769-0A7D-46CE-97EB-1A0B73BED739}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{667B4769-0A7D-46CE-97EB-1A0B73BED739}.Release|Any CPU.Build.0 = Release|Any CPU
+		{468D8EB5-08D8-4BFE-BD9B-4FD122104EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{468D8EB5-08D8-4BFE-BD9B-4FD122104EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{468D8EB5-08D8-4BFE-BD9B-4FD122104EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{468D8EB5-08D8-4BFE-BD9B-4FD122104EB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +45,7 @@ Global
 		{C977CE14-8251-4AE4-9537-FD725929CB98} = {2EDE3189-68D0-4F7C-BD3F-2434F1BEB27E}
 		{35AA0862-AAC4-4D20-AC9A-DAF1AA6EB8ED} = {2EDE3189-68D0-4F7C-BD3F-2434F1BEB27E}
 		{667B4769-0A7D-46CE-97EB-1A0B73BED739} = {2EDE3189-68D0-4F7C-BD3F-2434F1BEB27E}
+		{468D8EB5-08D8-4BFE-BD9B-4FD122104EB5} = {55C4198F-2E5B-42AC-B3A8-7A0C9A2611D8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B79D9D78-6E06-4654-A56F-40579E2D5AC2}
