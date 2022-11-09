@@ -41,7 +41,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (!isRoleInDatabase)
                 {
                     responseGeneralDTO.StatusCode = 404;
-                    responseGeneralDTO.Message = "Error: The id role does not exist";
+                    responseGeneralDTO.Message = "The id role does not exist";
 
                     return NotFound(responseGeneralDTO);
                 }
@@ -51,7 +51,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (isUserInDatabase)
                 {
                     responseGeneralDTO.StatusCode = 403;
-                    responseGeneralDTO.Message = "Can not create user because username already exists";
+                    responseGeneralDTO.Message = "Username already exists";
 
                     return new ObjectResult(responseGeneralDTO) { StatusCode = 403};
                 }
@@ -95,7 +95,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (isUserInDatabase)
                 {
                     responseGeneralDTO.StatusCode = 403;
-                    responseGeneralDTO.Message = "Can not create user because username already exists";
+                    responseGeneralDTO.Message = "Username already exists";
 
                     return new ObjectResult(responseGeneralDTO) { StatusCode = 403 };
                 }
@@ -132,7 +132,7 @@ namespace AuthJWTWebAPI.Controllers
             if (!isUserInDatabase)
             {
                 responseGeneralDTO.StatusCode = 404;
-                responseGeneralDTO.Message = "Error: user id does not exist";
+                responseGeneralDTO.Message = "User Id does not exist";
 
                 return NotFound(responseGeneralDTO);
             }
@@ -158,7 +158,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (!isUserInDatabase)
                 {
                     responseGeneralDTO.StatusCode = 404;
-                    responseGeneralDTO.Message = "Error: The id user does not exist";
+                    responseGeneralDTO.Message = "User Id does not exist";
 
                     return NotFound(responseGeneralDTO);
                 }
@@ -168,7 +168,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (!isRoleInDatabase)
                 {
                     responseGeneralDTO.StatusCode = 404;
-                    responseGeneralDTO.Message = "Error: The id role user does not exist";
+                    responseGeneralDTO.Message = "Role Id does not exist";
 
                     return NotFound(responseGeneralDTO);
                 }
@@ -178,7 +178,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (roleInUserFromDb == null)
                 {
                     responseGeneralDTO.StatusCode = 404;
-                    responseGeneralDTO.Message = "Error: The user does not have that role";
+                    responseGeneralDTO.Message = "User does not have that role";
 
                     return NotFound(responseGeneralDTO);
                 }
@@ -186,7 +186,7 @@ namespace AuthJWTWebAPI.Controllers
                 await _rolesInUserService.DeleteAsync(roleInUserFromDb);
 
                 responseGeneralDTO.StatusCode = 200;
-                responseGeneralDTO.Message = "The role of user has been deleted";
+                responseGeneralDTO.Message = "Role removed in the user";
 
                 return Ok(responseGeneralDTO);
             }
@@ -210,7 +210,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (!isUserInDatabase)
                 {
                     responseGeneralDTO.StatusCode = 404;
-                    responseGeneralDTO.Message = "Error: The id user does not exist";
+                    responseGeneralDTO.Message = "User Id does not exist";
 
                     return NotFound(responseGeneralDTO);
                 }
@@ -220,7 +220,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (!isRoleInDatabase)
                 {
                     responseGeneralDTO.StatusCode = 404;
-                    responseGeneralDTO.Message = "Error: The id role user does not exist";
+                    responseGeneralDTO.Message = "Role Id does not exist";
 
                     return NotFound(responseGeneralDTO);
                 }
@@ -230,7 +230,7 @@ namespace AuthJWTWebAPI.Controllers
                 if (isRoleInUserFromDb)
                 {
                     responseGeneralDTO.StatusCode = 403;
-                    responseGeneralDTO.Message = "Error: The user already has that role";
+                    responseGeneralDTO.Message = "User already has that role";
 
                     return new ObjectResult(responseGeneralDTO) { StatusCode = 403 };
                 }
@@ -238,7 +238,7 @@ namespace AuthJWTWebAPI.Controllers
                 await _rolesInUserService.AddAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
 
                 responseGeneralDTO.StatusCode = 201;
-                responseGeneralDTO.Message = "The role in the user has been saved";
+                responseGeneralDTO.Message = "Role saved in the user";
 
                 return new ObjectResult(responseGeneralDTO) { StatusCode = 201 };
             }
