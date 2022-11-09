@@ -46,7 +46,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, IdentityTokenClaimService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IRolesInUserService, RolesInUserService>();
-builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddScoped<IEncryptService, EncryptOfSystem>();
 
 
