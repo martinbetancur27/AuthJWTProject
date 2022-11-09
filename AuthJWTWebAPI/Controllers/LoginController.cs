@@ -28,16 +28,16 @@ namespace AuthJWTWebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
+            ResponseLoginDTO responseLoginDTO = new ResponseLoginDTO();
+
             if (ModelState.IsValid)
             {
-                ResponseLoginDTO responseLoginDTO = new ResponseLoginDTO();
-
                 User? user = await _loginService.LoginAsync(userLogin.Username, userLogin.Password);
 
                 if (user == null)
                 {
-                    responseLoginDTO.Result = 404;
-                    responseLoginDTO.Mesagge = "User not found";
+                    responseLoginDTO.StatusCode = 404;
+                    responseLoginDTO.Message = "Wrong login";
                     return NotFound(responseLoginDTO);
                 }
 
@@ -45,27 +45,24 @@ namespace AuthJWTWebAPI.Controllers
 
                 if (token == null)
                 {
-                    responseLoginDTO.Result = 404;
-                    responseLoginDTO.Mesagge = "Can not create token";
+                    responseLoginDTO.StatusCode = 500;
+                    responseLoginDTO.Message = "System can not create token";
 
-                    return NotFound(responseLoginDTO);
+                    return new ObjectResult(responseLoginDTO) { StatusCode = 500 };
                 }
 
-                responseLoginDTO.Result = 200;
-                responseLoginDTO.Mesagge = "Succes";
+                responseLoginDTO.StatusCode = 200;
+                responseLoginDTO.Message = "Succes";
                 responseLoginDTO.ExpireInMinutes = TokenConstants.ExpireInMinutes;
                 responseLoginDTO.Token = token;
 
                 return Ok(responseLoginDTO);
             }
 
-            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO
-            {
-                StatusCode = 500,
-                Message = "Insert all the fields"
-            };
+            responseLoginDTO.StatusCode = 400;
+            responseLoginDTO.Message = "Insert all the fields";
 
-            return BadRequest(responseGeneralDTO);
+            return BadRequest(responseLoginDTO);
         }
 
 

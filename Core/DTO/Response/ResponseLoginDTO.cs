@@ -8,8 +8,8 @@ namespace Core.DTO.Response
 {
     public class ResponseLoginDTO
     {
-        public int Result { get; set; }
-        public string Mesagge { get; set; }
+        public int StatusCode { get; set; }
+        public string Message { get; set; }
         public int ExpireInMinutes { get; set; }
         public string Token { get; set; }
     }
