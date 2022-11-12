@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.DTO.Auth
 {
-    public class UserLogin
+    public class UserLoginDTO
     {
         [Required]
         public string Username { get; set; }

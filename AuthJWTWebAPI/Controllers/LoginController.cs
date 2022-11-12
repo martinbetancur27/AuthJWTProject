@@ -26,7 +26,7 @@ namespace AuthJWTWebAPI.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
+        public async Task<IActionResult> Login([FromBody] UserLoginDTO userLogin)
         {
             ResponseLoginDTO responseLoginDTO = new ResponseLoginDTO();
 
@@ -65,9 +65,8 @@ namespace AuthJWTWebAPI.Controllers
             return BadRequest(responseLoginDTO);
         }
 
-
         [AllowAnonymous]
-        [HttpPut("user/changepassword")]
+        [HttpPut("password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDTO)
         {
             ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
