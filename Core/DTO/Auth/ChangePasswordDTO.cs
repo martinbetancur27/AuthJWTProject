@@ -10,12 +10,16 @@ namespace Core.DTO.Auth
     public class ChangePasswordDTO
     {
         [Required]
+        [MaxLength(25)]
         public string Username { get; set; }
         [Required]
+        [MaxLength(256)]
         public string CurrentPassword { get; set; }
         [Required]
+        [MaxLength(256)]
         public string NewPassword { get; set; }
         [Required]
+        [MaxLength(256)]
         public string NewPasswordAgain { get; set; }
     }
 }
