@@ -26,10 +26,10 @@ namespace Infrastructure.Data
                 user.ToTable("User");
                 user.HasKey(p => p.Id);
                 user.Property(p => p.Id).ValueGeneratedOnAdd();
-                user.Property(p => p.Name).IsRequired();
-                user.Property(p => p.UserName).IsRequired();
+                user.Property(p => p.Name).IsRequired().HasMaxLength(50);
+                user.Property(p => p.UserName).IsRequired().HasMaxLength(25);
                 user.HasIndex(p => p.UserName).IsUnique();
-                user.Property(p => p.Password).IsRequired();
+                user.Property(p => p.Password).IsRequired().HasMaxLength(256);
                 user.HasMany(x => x.Roles)
                 .WithMany(x => x.Users)
                 .UsingEntity<UserRole>(
@@ -43,8 +43,8 @@ namespace Infrastructure.Data
                 role.ToTable("Role");
                 role.HasKey(p => p.Id);
                 role.Property(p => p.Id).ValueGeneratedOnAdd();
-                role.Property(p => p.Name).IsRequired();
-                role.Property(p => p.Description).IsRequired();
+                role.Property(p => p.Name).IsRequired().HasMaxLength(25);
+                role.Property(p => p.Description).IsRequired().HasMaxLength(100);
                 role.HasMany(x => x.Users)
                 .WithMany(x => x.Roles)
                 .UsingEntity<UserRole>(
