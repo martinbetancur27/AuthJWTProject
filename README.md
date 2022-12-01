@@ -48,6 +48,8 @@ Clean Architecture
 
         Remember, Try to delegate token issuance to a third party (IdentityServer4, OAuth, AD, etc), so you don't need to implement or maintain that part of the system and only need to consume/validate the generated tokens.
 
+* Add CORS according to your own policy.
+
 ## Pending improvements
 
 * Create an individual method in each repository called SaveChangesAsync that calls EF's SaveChangesAsync() ; it must be called from the service layer and remove the save on each Add, Delete and Update of the repositories. Another way to implement it is with Unit Of Work. The EF context already provides the Unit of Work functionality but an extra layer could be created.
