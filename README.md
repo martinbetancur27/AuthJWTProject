@@ -50,6 +50,7 @@ Clean Architecture
 
 ## Pending improvements
 
+* Create an individual method in each repository called SaveChangesAsync that calls EF's SaveChangesAsync() ; it must be called from the service layer and remove the save on each Add, Delete and Update of the repositories. Another way to implement it is with Unit Of Work. The EF context already provides the Unit of Work functionality but an extra layer could be created.
 * Add a minimum of 1 in the ID's through DataAnnotations so that ModelState prevents resources from being consumed unnecessarily. Good flow control must be created to avoid unnecessary consumption of resources in the database or expensive processes to execute
 * Send the logs to a text file with a library like nlog.
 * Increase unit tests
