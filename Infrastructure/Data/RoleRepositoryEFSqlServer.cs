@@ -19,7 +19,7 @@ namespace Infrastructure.Data
             _databaseContext = db;
         }
 
-        public async Task<bool> IsIdRegistered(int idRole)
+        public async Task<bool> IsIdRegisteredAsync(int idRole)
         {
             return await _databaseContext.Roles.Where(x => x.Id == idRole).AnyAsync();
         }

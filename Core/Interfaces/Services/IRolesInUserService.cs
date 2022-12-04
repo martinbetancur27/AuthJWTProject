@@ -1,4 +1,6 @@
-﻿using Core.Entities.Auth;
+﻿using Core.DTO.Response;
+using Core.DTO.User;
+using Core.Entities.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,7 @@ namespace Core.Interfaces.Services
 {
     public interface IRolesInUserService
     {
-        public Task<bool> IsRoleAndUserAsync(int idUser, int idRole);
-        public Task<int?> AddUserAndPutRoleAndReturnIdUserAsync(User user, UserRole userRole);
-        public Task<UserRole?> GetByUserAndRoleAsync(int idUser, int idRole);
-        public Task<bool> AddAsync(int idUser, int idRole);
-        public Task<bool> DeleteAsync(UserRole userRole);
+        public Task<ResponseGeneralDTO> AddAsync(UserRoleDTO newRoleInUser);
+        public Task<ResponseGeneralDTO> DeleteAsync(UserRoleDTO deleteRoleInUser);
     }
 }

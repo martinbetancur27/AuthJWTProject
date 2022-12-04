@@ -10,7 +10,6 @@ namespace Core.Interfaces.Repositories
     public interface IUserRoleRepository
     {
         public Task<bool> IsRoleAndUserAsync(int idUser, int idRole);
-        public Task<int?> AddUserAndPutRoleAndReturnIdUserAsync(User user, UserRole userRole);
         public Task<bool> AddAsync(UserRole userRole);
         public Task<bool> DeleteAsync(UserRole userRole);
         public Task<UserRole?> GetByUserAndRoleAsync(int idUser, int idRole);

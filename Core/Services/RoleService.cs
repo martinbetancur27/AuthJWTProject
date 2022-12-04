@@ -1,10 +1,5 @@
 ﻿using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Services
 {
@@ -19,7 +14,7 @@ namespace Core.Services
 
         public async Task<bool> IsIdRegisteredAsync(int idRole)
         {
-            return await _roleRepository.IsIdRegistered(idRole);
+            return await _roleRepository.IsIdRegisteredAsync(idRole);
         }
     }
 }

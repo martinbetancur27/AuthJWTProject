@@ -14,6 +14,7 @@ namespace Core.Interfaces.Repositories
         public Task<bool> IsUsernameRegisteredAsync(string userName);
         public Task<bool> IsIdRegisteredAsync(int idUser);
         public Task<int?> AddAndReturnIdAsync(User user);
+        public Task<int?> AddAndPutRoleAndReturnIdAsync(User user, UserRole userRole);
         public Task<bool> DeleteAsync(User user);
         public bool Update(User user);
     }

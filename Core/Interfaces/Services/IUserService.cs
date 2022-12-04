@@ -1,4 +1,7 @@
-﻿using Core.Entities.Auth;
+﻿using Core.DTO.Response;
+using Core.DTO.User;
+using Core.DTO.UserDTO;
+using Core.Entities.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +12,10 @@ namespace Core.Interfaces.Services
 {
     public interface IUserService
     {
-        public Task<User?> GetByIdAsync(int idUser);
+        public Task<ResponseGeneralDTO> AddAsync(CreateUserDTO createUser);
+        public Task<ResponseGeneralDTO> DeleteByIdAsync(int id);
+        public Task<ResponseGeneralDTO> AddWithRoleAsync(CreateUserWithRoleDTO createUserWithRole);
         public Task<User?> FindByUsernameAndPasswordAsync(string userName, string password);
-        public Task<bool> IsUsernameRegisteredAsync(string userName);
-        public Task<bool> IsIdRegisteredAsync(int idUser);
-        public Task<int?> AddAndReturnIdAsync(User user);
-        public Task<bool> DeleteByIdAsync(int id);
         public bool Update(User user);
     }
 }

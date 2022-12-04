@@ -1,60 +1,112 @@
-﻿using Core.Entities.Auth;
+﻿using Core.DTO.Response;
+using Core.DTO.User;
+using Core.Entities.Auth;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Services
 {
     public class RolesInUserService : IRolesInUserService
     {
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IUserRoleRepository _userRoleRepository;
-        private readonly IEncryptService _encryptService;
 
-        public RolesInUserService(IUserRoleRepository userRoleRepository, IEncryptService encryptService)
+        public RolesInUserService(IUserRepository userRepository, IRoleRepository roleRepository, IUserRoleRepository userRoleRepository)
         {
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
             _userRoleRepository = userRoleRepository;
-            _encryptService = encryptService;
         }
 
-
-        public async Task<bool> AddAsync(int idUser, int idRole)
+        public async Task<ResponseGeneralDTO> AddAsync(UserRoleDTO newRoleInUser)
         {
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
+            
+            var isUserInDatabase = await _userRepository.IsIdRegisteredAsync(newRoleInUser.IdUser);
+
+            if (!isUserInDatabase)
+            {
+                responseGeneralDTO.StatusCode = 404;
+                responseGeneralDTO.Message = "User Id does not exist";
+
+                return responseGeneralDTO;
+            }
+
+            var isRoleInDatabase = await _roleRepository.IsIdRegisteredAsync(newRoleInUser.IdRole);
+
+            if (!isRoleInDatabase)
+            {
+                responseGeneralDTO.StatusCode = 404;
+                responseGeneralDTO.Message = "Role Id does not exist";
+
+                return responseGeneralDTO;
+            }
+
+            var isRoleInUserFromDb = await _userRoleRepository.IsRoleAndUserAsync(newRoleInUser.IdUser, newRoleInUser.IdRole);
+
+            if (isRoleInUserFromDb)
+            {
+                responseGeneralDTO.StatusCode = 403;
+                responseGeneralDTO.Message = "User already has that role";
+
+                return responseGeneralDTO;
+            }
+
             UserRole userRole = new UserRole
             {
-                IdUser = idUser,
-                IdRole = idRole
+                IdUser = newRoleInUser.IdUser,
+                IdRole = newRoleInUser.IdRole
             };
-            return await _userRoleRepository.AddAsync(userRole);
+
+            await _userRoleRepository.AddAsync(userRole);
+
+            responseGeneralDTO.StatusCode = 201;
+            responseGeneralDTO.Message = "Role saved in the user";
+
+            return responseGeneralDTO;
         }
 
-
-        public async Task<int?> AddUserAndPutRoleAndReturnIdUserAsync(User user, UserRole userRole)
+        public async Task<ResponseGeneralDTO> DeleteAsync(UserRoleDTO deleteRoleInUser)
         {
-            user.Password = _encryptService.GetSHA256OfString(user.Password);
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
 
-            return await _userRoleRepository.AddUserAndPutRoleAndReturnIdUserAsync(user, userRole);
-        }
+            var isUserInDatabase = await _userRepository.IsIdRegisteredAsync(deleteRoleInUser.IdUser);
 
+            if (!isUserInDatabase)
+            {
+                responseGeneralDTO.StatusCode = 404;
+                responseGeneralDTO.Message = "User Id does not exist";
 
-        public async Task<bool> IsRoleAndUserAsync(int idUser, int idRole)
-        {
-            return await _userRoleRepository.IsRoleAndUserAsync(idUser, idRole);
-        }
+                return responseGeneralDTO;
+            }
 
+            var isRoleInDatabase = await _roleRepository.IsIdRegisteredAsync(deleteRoleInUser.IdRole);
 
-        public async Task<bool> DeleteAsync(UserRole userRole)
-        {
-            return await _userRoleRepository.DeleteAsync(userRole);
-        }
+            if (!isRoleInDatabase)
+            {
+                responseGeneralDTO.StatusCode = 404;
+                responseGeneralDTO.Message = "Role Id does not exist";
 
+                return responseGeneralDTO;
+            }
 
-        public async Task<UserRole?> GetByUserAndRoleAsync(int idUser, int idRole)
-        {
-            return await _userRoleRepository.GetByUserAndRoleAsync(idUser, idRole);
+            var roleInUserFromDb = await _userRoleRepository.GetByUserAndRoleAsync(deleteRoleInUser.IdUser, deleteRoleInUser.IdRole);
+
+            if (roleInUserFromDb == null)
+            {
+                responseGeneralDTO.StatusCode = 404;
+                responseGeneralDTO.Message = "User does not have that role";
+
+                return responseGeneralDTO;
+            }
+
+            await _userRoleRepository.DeleteAsync(roleInUserFromDb);
+
+            responseGeneralDTO.StatusCode = 200;
+            responseGeneralDTO.Message = "Role removed in the user";
+
+            return responseGeneralDTO;            
         }
     }
 }

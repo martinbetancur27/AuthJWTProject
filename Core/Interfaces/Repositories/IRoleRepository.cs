@@ -8,6 +8,6 @@ namespace Core.Interfaces.Repositories
 {
     public interface IRoleRepository
     {
-        public Task<bool> IsIdRegistered(int idRole);
+        public Task<bool> IsIdRegisteredAsync(int idRole);
     }
 }
