@@ -43,14 +43,12 @@ namespace AuthJWTWebAPI.Controllers
         [HttpPost("withrole")]
         public async Task<IActionResult> AddUserWithRole([FromBody] CreateUserWithRoleDTO createUserWithRole)
         {
-            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            responseGeneralDTO = await _userService.AddWithRoleAsync(createUserWithRole);
+            ResponseGeneralDTO responseGeneralDTO = await _userService.AddWithRoleAsync(createUserWithRole);
 
             return new ObjectResult(responseGeneralDTO) { StatusCode = responseGeneralDTO.StatusCode };
         }
