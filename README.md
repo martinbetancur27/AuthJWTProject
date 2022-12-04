@@ -42,7 +42,6 @@ Clean Architecture
 
 
 ## Warnings
-* My controller is big to be able to log everything that went wrong with the controlled flows and return a response code with an appropriate message based on the behavior of the system and avoid consuming unnecessary server resources.
 
 * JWT. User data travels on each request, so you must use an SSL/HTTPS connection. Do not put sensitive data in User Claims because these fields are not encrypted. Anyone who has the token will be able to access the resources that are available to them.
 
