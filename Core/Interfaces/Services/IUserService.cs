@@ -10,6 +10,7 @@ namespace Core.Interfaces.Services
     public interface IUserService
     {
         public Task<User?> GetByIdAsync(int idUser);
+        public Task<User?> FindByUsernameAndPasswordAsync(string userName, string password);
         public Task<bool> IsUsernameRegisteredAsync(string userName);
         public Task<bool> IsIdRegisteredAsync(int idUser);
         public Task<int?> AddAndReturnIdAsync(User user);

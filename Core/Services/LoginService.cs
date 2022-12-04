@@ -1,6 +1,7 @@
-﻿using Core.DTO.Auth;
+﻿using Core.Constants;
+using Core.DTO.Auth;
+using Core.DTO.Response;
 using Core.Entities.Auth;
-using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
@@ -12,27 +13,78 @@ namespace Core.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly IUserRepository _userRepository; 
+        private readonly IUserService _userService; 
         private readonly IEncryptService _encryptService;
+        private readonly ITokenService _tokenService;
 
-        public LoginService(IUserRepository userRepository, IEncryptService encryptService)
+        public LoginService(IUserService userService, IEncryptService encryptService, ITokenService tokenService)
         {
-            _userRepository = userRepository;
             _encryptService = encryptService;
+            _tokenService = tokenService;
+            _userService = userService;
         }
 
-        public async Task<User?> LoginAsync(string userName, string password)
+        public async Task<ResponseLoginDTO> LoginAsync(UserLoginDTO userLogin)
         {
-            var passwordSha256 = _encryptService.GetSHA256OfString(password);
+            ResponseLoginDTO responseLoginDTO = new ResponseLoginDTO();
             
-            return await _userRepository.GetByUsernameAndPasswordAsync(userName, passwordSha256);
+            User? user = await _userService.FindByUsernameAndPasswordAsync(userLogin.Username, userLogin.Password);
+
+            if (user == null)
+                {
+                    responseLoginDTO.StatusCode = 404;
+                    responseLoginDTO.Message = "Wrong login";
+
+                    return responseLoginDTO;
+                }
+
+                var token = _tokenService.GenerateToken(user);
+
+                if (token == null)
+                {
+                    responseLoginDTO.StatusCode = 500;
+                    responseLoginDTO.Message = "System can not create token";
+
+                    return responseLoginDTO;
+                }
+
+                responseLoginDTO.StatusCode = 200;
+                responseLoginDTO.Message = "Succes";
+                responseLoginDTO.ExpireInMinutes = TokenConstants.ExpireInMinutes;
+                responseLoginDTO.Token = token;
+
+                return responseLoginDTO;
         }
 
-        public bool ChangePassword(User user, string newPassword)
+        public async Task<ResponseGeneralDTO> ChangePasswordAsync(ChangePasswordDTO changePasswordDTO)
         {
-            user.Password = _encryptService.GetSHA256OfString(newPassword);
+            ResponseGeneralDTO responseGeneralDTO = new ResponseGeneralDTO();
 
-            return _userRepository.Update(user);
+            if (changePasswordDTO.NewPassword != changePasswordDTO.NewPasswordAgain)
+                {
+                    responseGeneralDTO.StatusCode = 400;
+                    responseGeneralDTO.Message = "New password dont match";
+
+                    return responseGeneralDTO;
+                }
+
+                User? user = await _userService.FindByUsernameAndPasswordAsync(changePasswordDTO.Username, changePasswordDTO.CurrentPassword);
+
+                if (user == null)
+                {
+                    responseGeneralDTO.StatusCode = 404;
+                    responseGeneralDTO.Message = "User not found";
+
+                    return responseGeneralDTO;
+                }
+
+                user.Password = _encryptService.GetSHA256OfString(changePasswordDTO.NewPassword);
+                _userService.Update(user);
+
+                responseGeneralDTO.StatusCode = 201;
+                responseGeneralDTO.Message = "Password changed";
+
+                return responseGeneralDTO;
         }
     }
 }

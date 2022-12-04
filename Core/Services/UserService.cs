@@ -37,6 +37,14 @@ namespace Core.Services
         }
 
 
+        public async Task<User?> FindByUsernameAndPasswordAsync(string userName, string password)
+        {
+            var passwordSha256 = _encryptService.GetSHA256OfString(password);
+            
+            return await _userRepository.GetByUsernameAndPasswordAsync(userName, passwordSha256);
+        }
+
+
         public async Task<int?> AddAndReturnIdAsync(User user)
         {
             user.Password = _encryptService.GetSHA256OfString(user.Password);
@@ -54,7 +62,7 @@ namespace Core.Services
 
             return await _userRepository.DeleteAsync(user);
         }
-
+        
 
         public bool Update(User user)
         {
