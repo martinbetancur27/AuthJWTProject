@@ -45,13 +45,13 @@ Clean Architecture
 
 * JWT. User data travels on each request, so you must use an SSL/HTTPS connection. Do not put sensitive data in User Claims because these fields are not encrypted. Anyone who has the token will be able to access the resources that are available to them.
 
-        Remember, Try to delegate token issuance to a third party (IdentityServer4, OAuth, AD, etc), so you don't need to implement or maintain that part of the system and only need to consume/validate the generated tokens.
+        Remember, Try to delegate token issuance to a third party (IdentityServer4, Auth0, AD, etc), so you don't need to implement or maintain that part of the system and only need to consume/validate the generated tokens.
 
 * Add CORS according to your own policy.
 
 ## Pending improvements
 
-* Create an individual method in each repository called SaveChangesAsync that calls EF's SaveChangesAsync() ; it must be called from the service layer and remove the save on each Add, Delete and Update of the repositories. Another way to implement it is with Unit Of Work. The EF context already provides the Unit of Work functionality but an extra layer could be created.
+* Implement Unit Of Work.
 * Define the type of primary key in the db with a GUID. It helps horizontal scalability because it allows sharding, it allows migrating to NoSQL and the code dependency is established in the application and not in the db. The DB would continue to comply with validating the data as unique. GUID also helps security because sequential numbers create vulnerability to the system.
 * Add a minimum of 1 in the ID's through DataAnnotations so that ModelState prevents resources from being consumed unnecessarily. Good flow control must be created to avoid unnecessary consumption of resources in the database or expensive processes to execute
 * Send the logs to a text file with a library like nlog.
