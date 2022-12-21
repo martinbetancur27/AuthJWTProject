@@ -57,6 +57,7 @@ Clean Architecture
 * Send the logs to a text file with a library like nlog.
 * Increase unit tests
 * Create extension method to separate dependency injection configuration; another to separate the connection configuration to the database.
+* Handle exception with the Middleware of the framework: 'app.UseExceptionHandler("/error");'. Delete custom middleware that handle exception not controlled.
 
 # High level design
 
