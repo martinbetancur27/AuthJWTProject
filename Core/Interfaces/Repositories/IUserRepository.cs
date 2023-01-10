@@ -1,4 +1,5 @@
-﻿using Core.Entities.Auth;
+﻿using Core.DTO.UserDTO;
+using Core.Entities.Auth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Core.Interfaces.Repositories
     {
         public Task<User?> GetByUsernameAndPasswordAsync(string userName, string password);
         public Task<User?> GetByIdAsync(int idUser);
+        public IEnumerable<UsersDTO>? GetAsync();
         public Task<bool> IsUsernameRegisteredAsync(string userName);
         public Task<bool> IsIdRegisteredAsync(int idUser);
         public Task<int?> AddAndReturnIdAsync(User user);

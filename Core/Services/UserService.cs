@@ -2,7 +2,6 @@
 using Core.Interfaces.Services;
 using Core.Entities.Auth;
 using Core.DTO.Response;
-using Core.DTO.User;
 using Core.DTO.UserDTO;
 
 namespace Core.Services
@@ -18,6 +17,15 @@ namespace Core.Services
             _userRepository = userRepository;
             _encryptService = encryptService;
             _roleService = roleService;
+        }
+
+        public Task<ResponseUsersDTO> GetAsync()
+        {
+            ResponseUsersDTO responseGeneralDTO = new ResponseUsersDTO();
+            
+            responseGeneralDTO.Users = _userRepository.GetAsync();
+
+            return Task.FromResult(responseGeneralDTO);
         }
 
         public async Task<ResponseGeneralDTO> AddAsync(CreateUserDTO createUser)

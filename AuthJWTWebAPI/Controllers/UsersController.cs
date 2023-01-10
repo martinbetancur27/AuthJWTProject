@@ -1,5 +1,4 @@
 ﻿using Core.DTO.Response;
-using Core.DTO.User;
 using Core.DTO.UserDTO;
 using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +29,14 @@ namespace AuthJWTWebAPI.Controllers
             ResponseGeneralDTO responseGeneralDTO = await _userService.AddAsync(createUser);
 
             return new ObjectResult(responseGeneralDTO) { StatusCode = responseGeneralDTO.StatusCode };
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetUsers()
+        {
+            ResponseUsersDTO responseUserDTO = await _userService.GetAsync();
+
+            return new ObjectResult(responseUserDTO) { StatusCode = responseUserDTO.StatusCode };
         }
 
         [HttpDelete("{id:int}")]

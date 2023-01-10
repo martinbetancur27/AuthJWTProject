@@ -1,5 +1,5 @@
 ﻿using Core.DTO.Response;
-using Core.DTO.User;
+using Core.DTO.UserDTO;
 using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;

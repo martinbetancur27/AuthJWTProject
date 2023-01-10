@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.DTO.User
+namespace Core.DTO.UserDTO
 {
     public class UserRoleDTO
     {

@@ -1,5 +1,5 @@
 ﻿using Core.DTO.Response;
-using Core.DTO.User;
+using Core.DTO.UserDTO;
 using Core.Entities.Auth;
 using Core.Interfaces.Repositories;
 using Core.Interfaces.Services;

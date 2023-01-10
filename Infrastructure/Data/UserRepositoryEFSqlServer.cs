@@ -1,4 +1,5 @@
-﻿using Core.Entities.Auth;
+﻿using Core.DTO.UserDTO;
+using Core.Entities.Auth;
 using Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,6 +17,17 @@ namespace Infrastructure.Data
         public UserRepositoryEFSqlServer(ApplicationDbContext db)
         {
             _databaseContext = db;
+        }
+
+        public IEnumerable<UsersDTO>? GetAsync()
+        {
+            return  _databaseContext.Users.Include(user => user.Roles).Select(user => new UsersDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                UserName = user.UserName,
+                Roles = user.Roles
+            });
         }
 
         public async Task<bool> IsUsernameRegisteredAsync(string userName)
