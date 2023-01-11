@@ -54,6 +54,7 @@ Clean Architecture
 * Implement Unit Of Work.
 * Define the type of primary key in the db with a GUID. It helps horizontal scalability because it allows sharding, it allows migrating to NoSQL and the code dependency is established in the application and not in the db. The DB would continue to comply with validating the data as unique. GUID also helps security because sequential numbers create vulnerability to the system.
 * Add a minimum of 1 in the ID's through DataAnnotations so that ModelState prevents resources from being consumed unnecessarily. Good flow control must be created to avoid unnecessary consumption of resources in the database or expensive processes to execute
+* Create stored procedure to avoid two 'trips' to the database when adding user and role in transaction with EF.
 * Send the logs to a text file with a library like nlog.
 * Increase unit tests
 * Create extension method to separate dependency injection configuration; another to separate the connection configuration to the database.
