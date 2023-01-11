@@ -47,7 +47,7 @@ namespace Core.Services
 
             if (isRoleInUserFromDb)
             {
-                responseGeneralDTO.StatusCode = 403;
+                responseGeneralDTO.StatusCode = 400;
                 responseGeneralDTO.Message = "User already has that role";
 
                 return responseGeneralDTO;

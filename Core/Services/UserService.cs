@@ -42,7 +42,7 @@ namespace Core.Services
 
             if (isUserInDatabase)
             {
-                responseGeneralDTO.StatusCode = 403;
+                responseGeneralDTO.StatusCode = 400;
                 responseGeneralDTO.Message = "Username already exists";
 
                 return responseGeneralDTO;
@@ -110,7 +110,7 @@ namespace Core.Services
 
             if (isUserInDatabase)
             {
-                responseGeneralDTO.StatusCode = 403;
+                responseGeneralDTO.StatusCode = 400;
                 responseGeneralDTO.Message = "Username already exists";
 
                 return responseGeneralDTO;
