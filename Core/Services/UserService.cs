@@ -3,6 +3,7 @@ using Core.Interfaces.Services;
 using Core.Entities.Auth;
 using Core.DTO.Response;
 using Core.DTO.UserDTO;
+using Core.DTO.Parameters;
 
 namespace Core.Services
 {
@@ -19,13 +20,18 @@ namespace Core.Services
             _roleService = roleService;
         }
 
-        public Task<ResponseUsersDTO> GetAsync()
+        public Task<ResponseUsersDTO> GetListAsync(UserParametersDTO userParameters)
         {
             ResponseUsersDTO responseGeneralDTO = new ResponseUsersDTO();
             
-            responseGeneralDTO.Users = _userRepository.GetAsync();
+            responseGeneralDTO.Users = _userRepository.GetListAsync(userParameters);
 
             return Task.FromResult(responseGeneralDTO);
+        }
+
+        public async Task<int?> CountAsync()
+        {
+            return await _userRepository.CountAsync();
         }
 
         public async Task<ResponseGeneralDTO> AddAsync(CreateUserDTO createUser)

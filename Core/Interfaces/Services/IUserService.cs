@@ -1,4 +1,5 @@
-﻿using Core.DTO.Response;
+﻿using Core.DTO.Parameters;
+using Core.DTO.Response;
 using Core.DTO.UserDTO;
 using Core.Entities.Auth;
 using System;
@@ -12,7 +13,8 @@ namespace Core.Interfaces.Services
     public interface IUserService
     {
         public Task<ResponseGeneralDTO> AddAsync(CreateUserDTO createUser);
-        public Task<ResponseUsersDTO> GetAsync();
+        public Task<ResponseUsersDTO> GetListAsync(UserParametersDTO userParameters);
+        public Task<int?> CountAsync();
         public Task<ResponseGeneralDTO> DeleteByIdAsync(int id);
         public Task<ResponseGeneralDTO> AddWithRoleAsync(CreateUserWithRoleDTO createUserWithRole);
         public Task<User?> FindByUsernameAndPasswordAsync(string userName, string password);

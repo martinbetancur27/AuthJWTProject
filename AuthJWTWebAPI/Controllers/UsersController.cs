@@ -1,8 +1,10 @@
-﻿using Core.DTO.Response;
+﻿using Core.DTO.Parameters;
+using Core.DTO.Response;
 using Core.DTO.UserDTO;
 using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace AuthJWTWebAPI.Controllers
 {
@@ -32,9 +34,21 @@ namespace AuthJWTWebAPI.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery] UserParametersDTO parameters)
         {
-            ResponseUsersDTO responseUserDTO = await _userService.GetAsync();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ResponseUsersDTO responseUserDTO = await _userService.GetListAsync(parameters);
+
+            var responsePaginationDTO = new ResponsePaginationDTO
+            (
+                await _userService.CountAsync() ?? 0, parameters.Page, parameters.PageSize
+            );
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(responsePaginationDTO));
 
             return new ObjectResult(responseUserDTO) { StatusCode = responseUserDTO.StatusCode };
         }

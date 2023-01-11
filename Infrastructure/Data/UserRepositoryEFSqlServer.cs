@@ -1,4 +1,5 @@
-﻿using Core.DTO.UserDTO;
+﻿using Core.DTO.Parameters;
+using Core.DTO.UserDTO;
 using Core.Entities.Auth;
 using Core.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,16 +20,25 @@ namespace Infrastructure.Data
             _databaseContext = db;
         }
 
-        public IEnumerable<UsersDTO>? GetAsync()
+        public IEnumerable<UsersDTO>? GetListAsync(UserParametersDTO userParameters)
         {
-            return  _databaseContext.Users.Include(user => user.Roles).Select(user => new UsersDTO
+            return  _databaseContext.Users.Include(user => user.Roles)
+               .Select(user => new UsersDTO
             {
                 Id = user.Id,
                 Name = user.Name,
                 UserName = user.UserName,
                 Roles = user.Roles
-            });
+            }).OrderBy(user => user.Id)
+              .Skip((userParameters.Page - 1) * userParameters.PageSize)
+              .Take(userParameters.PageSize).AsNoTracking();
         }
+
+        public async Task<int?> CountAsync()
+        {
+            return await _databaseContext.Users.CountAsync();
+        }
+
 
         public async Task<bool> IsUsernameRegisteredAsync(string userName)
         {
