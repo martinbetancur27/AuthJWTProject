@@ -22,11 +22,11 @@ namespace Core.Services
 
         public Task<ResponseUsersDTO> GetListAsync(UserParametersDTO userParameters)
         {
-            ResponseUsersDTO responseGeneralDTO = new ResponseUsersDTO();
+            ResponseUsersDTO responseUsersDTO = new ResponseUsersDTO();
             
-            responseGeneralDTO.Users = _userRepository.GetListAsync(userParameters);
+            responseUsersDTO.Users = _userRepository.GetListAsync(userParameters);
 
-            return Task.FromResult(responseGeneralDTO);
+            return Task.FromResult(responseUsersDTO);
         }
 
         public async Task<int?> CountAsync()
