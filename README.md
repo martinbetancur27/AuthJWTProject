@@ -15,6 +15,7 @@ Clean Architecture
 * RESTful architecture
 * HTTP Response Status Code
 * Authentication and Autorization with JWT Bearer
+* Classic pagination (skip and take)
 * Swagger Config
 * Create Middleware
 
